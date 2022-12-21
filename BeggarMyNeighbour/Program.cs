@@ -1,6 +1,7 @@
-﻿using BeggarMyNeighbourLibrary;
+﻿using System.Globalization;
+using BeggarMyNeighbourLibrary;
 using BeggarMyNeighbourLibrary.Helpers;
-using static System.Console;
+
 
 namespace BeggarMyNeighbour;
 
@@ -11,6 +12,8 @@ internal class Program
         var maxCards = 0;
         var iterations = 0;
         var record = 0;
+
+        var fileNameStub = Guid.NewGuid().ToString();
 
         while (true)
         {
@@ -25,12 +28,14 @@ internal class Program
             record++;
             maxCards = cards;
 
-            WriteLine($"{record}) {DateTime.Now}");
-            WriteLine($"Most cards played is {maxCards} after {iterations} iterations");
-            WriteLine($"Most tricks played is {tricks} after {iterations} iterations");
-            WriteLine(playerOneDeal);
-            WriteLine(playerTwoDeal);
-            WriteLine();
+            var resultLine1 = $"{record}) {DateTime.Now}";
+            var resultLine2 = $"Most cards played is {maxCards} after {iterations} iterations";
+            var resultLine3 = $"Most tricks played is {tricks} after {iterations} iterations";
+            var resultLine4 = playerOneDeal;
+            var resultLine5 = playerTwoDeal;
+            var resultLine6 = string.Empty;
+
+            Output.WriteResults(fileNameStub, resultLine1, resultLine2, resultLine3, resultLine4, resultLine5, resultLine6);
         }
     }
 
@@ -38,5 +43,23 @@ internal class Program
     {
         Deck.GenerateStacks(out var playerOneStack, out var playerTwoStack, out playerOneDeal, out playerTwoDeal);
         Engine.RunScenario(playerOneStack, playerTwoStack, out cards, out tricks);
+    }
+
+    private static void ScenarioPlay1()
+    {
+        Engine.RunScenario(
+            "---AJ--Q---------QAKQJJ-QK",
+            "-----A----KJ-K--------A---",
+            out var cards,
+            out var tricks);
+    }
+
+    private static void ScenarioPlay2()
+    {
+        Engine.RunScenario(
+            "----K---A--Q-A--JJA------J",
+            "-----KK---------A-JK-Q-Q-Q",
+            out var cards,
+            out var tricks);
     }
 }
