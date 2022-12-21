@@ -1,70 +1,42 @@
 ﻿using BeggarMyNeighbourLibrary;
 using BeggarMyNeighbourLibrary.Helpers;
+using static System.Console;
 
-namespace BeggarMyNeighbour
+namespace BeggarMyNeighbour;
+
+internal class Program
 {
-    internal class Program
+    private static void Main(string[] args)
     {
-        static void Main(string[] args)
+        var maxCards = 0;
+        var iterations = 0;
+        var record = 0;
+
+        while (true)
         {
-            int maxCards = 0;
-            //int maxTricks = 0;
-            int iterations = 0;
-            int record = 0;
-            while (true)
+            iterations++;
+            NormalPlay(out var cards, out var tricks, out var playerOneDeal, out var playerTwoDeal);
+
+            if (cards <= maxCards)
             {
-                iterations++;
-                NormalPlay(out var cards, out var tricks, out var playerOneDeal, out var playerTwoDeal);
-                //bool spaceIt = false;
-                if (cards > maxCards)
-                {
-                    record++;
-                    maxCards = cards;
-                    Console.WriteLine($"{record}) {DateTime.Now}");
-                    Console.WriteLine($"Most cards played is {maxCards} after {iterations} iterations");
-                    //aceIt = true;
-
-                    //if (tricks > maxTricks)
-                    //{
-                    //maxTricks = tricks;
-                    Console.WriteLine($"Most tricks played is {tricks} after {iterations} iterations");
-                    //  spaceIt = true;
-                    //}
-                    Console.WriteLine(playerOneDeal);
-                    Console.WriteLine(playerTwoDeal);
-                    Console.WriteLine();
-                }
-
-
-
-//                if (spaceIt)
-  //              {
-
-    //            }
-
+                continue;
             }
-            //ScenarioPlay1();
-            //ScenarioPlay2();
+
+            record++;
+            maxCards = cards;
+
+            WriteLine($"{record}) {DateTime.Now}");
+            WriteLine($"Most cards played is {maxCards} after {iterations} iterations");
+            WriteLine($"Most tricks played is {tricks} after {iterations} iterations");
+            WriteLine(playerOneDeal);
+            WriteLine(playerTwoDeal);
+            WriteLine();
         }
+    }
 
-        static void NormalPlay(out int cards, out int tricks, out string playerOneDeal, out string playerTwoDeal)
-        {
-            Deck.GenerateStacks(out var playerOneStack, out var playerTwoStack, out playerOneDeal, out playerTwoDeal);
-            Engine.RunScenario(playerOneStack, playerTwoStack, out cards, out tricks);
-        }
-
-        //static void ScenarioPlay1()
-        //{
-        //    Engine.RunScenario(
-        //        "---AJ--Q---------QAKQJJ-QK",
-        //        "-----A----KJ-K--------A---", out var cards, out var tricks);
-        //}
-
-        //static void ScenarioPlay2()
-        //{
-        //    Engine.RunScenario(
-        //        "----K---A--Q-A--JJA------J",
-        //        "-----KK---------A-JK-Q-Q-Q", out var cards, out var tricks);
-        //}
+    private static void NormalPlay(out int cards, out int tricks, out string playerOneDeal, out string playerTwoDeal)
+    {
+        Deck.GenerateStacks(out var playerOneStack, out var playerTwoStack, out playerOneDeal, out playerTwoDeal);
+        Engine.RunScenario(playerOneStack, playerTwoStack, out cards, out tricks);
     }
 }
