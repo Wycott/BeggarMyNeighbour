@@ -4,7 +4,7 @@ public static class Deck
 {
     public static List<Card> Generate()
     {
-        var retVal = new List<Card>();
+        var retVal = new List<Card>(52);
         for (var r = 0; r < 13; r++)
         {
             for (var n = 0; n < 4; n++)
@@ -35,8 +35,8 @@ public static class Deck
 
     public static void GenerateStacks(out List<Card> playerOneStack, out List<Card> playerTwoStack, out string playerOneDeal, out string playerTwoDeal)
     {
-        playerOneStack = new List<Card>();
-        playerTwoStack = new List<Card>();
+        playerOneStack = new List<Card>(26);
+        playerTwoStack = new List<Card>(26);
         playerOneDeal = string.Empty;
         playerTwoDeal = string.Empty;
 
