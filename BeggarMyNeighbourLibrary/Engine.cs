@@ -4,8 +4,8 @@ public static class Engine
 {
     public static void RunScenario(string playerOneCardString, string playerTwoCardString, out int cards, out int tricks)
     {
-        var playerOneCards = new List<Card>();
-        var playerTwoCards = new List<Card>();
+        var playerOneCards = new List<Card>(26);
+        var playerTwoCards = new List<Card>(26);
 
         foreach (var c in playerOneCardString)
         {
@@ -27,7 +27,7 @@ public static class Engine
         var penalty = 0;
         tricks = 0;
         cards = 0;
-        var pile = new List<Card>();
+        var pile = new List<Card>(52);
 
         while (playerOneCards.Count > 0 && playerTwoCards.Count > 0)
         {
