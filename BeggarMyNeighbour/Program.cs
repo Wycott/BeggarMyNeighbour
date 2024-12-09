@@ -26,15 +26,24 @@ internal class Program
 
             record++;
             maxCards = cards;
+            var maxDecks = cards / 52;
 
             var resultLine1 = $"{record}) {DateTime.Now}";
-            var resultLine2 = $"Most cards played is {maxCards} after {iterations} iterations";
-            var resultLine3 = $"Most tricks played is {tricks} after {iterations} iterations";
-            var resultLine4 = playerOneDeal;
-            var resultLine5 = playerTwoDeal;
-            var resultLine6 = string.Empty;
+            var resultLine2 = $"After {iterations} iterations";
+            var resultLine3 = $"Most cards played is {maxCards}";
+            var resultLine4 = $"Most decks played is {maxDecks}";
+            var resultLine5 = $"Most tricks played is {tricks}";
+            var resultLine8 = string.Empty;
 
-            Output.WriteResults(fileNameStub, resultLine1, resultLine2, resultLine3, resultLine4, resultLine5, resultLine6);
+            Output.WriteResults(fileNameStub,
+                resultLine1,
+                                resultLine2,
+                                resultLine3,
+                                resultLine4,
+                                resultLine5,
+                                playerOneDeal,
+                                playerTwoDeal,
+                                resultLine8);
         }
     }
 
