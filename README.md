@@ -8,6 +8,6 @@ A Beggar-My-Neighbour runner to find long games and other curiosities
 
 ---
 
-*Created: 1 March 2024*  
+*Created: 21 December 2022*  
 *Updated: 9 December 2024*
 
