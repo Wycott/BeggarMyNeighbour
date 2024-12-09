@@ -1,6 +1,6 @@
 ﻿namespace BeggarMyNeighbourLibrary;
 
-public  class Card
+public class Card
 {
     public Card(char simpleRank)
     {
