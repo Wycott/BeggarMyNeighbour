@@ -28,10 +28,10 @@ internal class Program
             var maxDecks = dealResult.Cards / 52;
 
             var resultLine1 = $"{record}) {DateTime.Now}";
-            var resultLine2 = $"After {iterations} iterations";
-            var resultLine3 = $"Most cards played is {maxCards}";
-            var resultLine4 = $"Most decks played is {maxDecks}";
-            var resultLine5 = $"Most tricks played is {dealResult.Tricks}";
+            var resultLine2 = $"After {iterations:N0} iterations";
+            var resultLine3 = $"Most cards played is {maxCards:N0}";
+            var resultLine4 = $"Most decks played is {maxDecks:N0}";
+            var resultLine5 = $"Most tricks played is {dealResult.Tricks:N0}";
             var resultLine8 = string.Empty;
 
             Output.WriteResults(fileNameStub,
