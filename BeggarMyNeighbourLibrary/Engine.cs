@@ -2,7 +2,7 @@
 
 public static class Engine
 {
-    public static void RunScenario(string playerOneCardString, string playerTwoCardString, out int cards, out int tricks)
+    public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
     {
         var playerOneCards = new List<Card>(26);
         var playerTwoCards = new List<Card>(26);
@@ -17,79 +17,96 @@ public static class Engine
             playerTwoCards.Add(new Card(c));
         }
 
-        RunScenario(playerOneCards, playerTwoCards, out cards, out tricks);
+        var dealStatistics = await RunScenario(playerOneCards, playerTwoCards);
+
+        return new DealResult
+        {
+            PlayerOneDeal = playerOneCardString,
+            PlayerTwoDeal = playerTwoCardString,
+            Cards = dealStatistics.Cards,
+            Tricks = dealStatistics.Tricks
+        };
     }
 
-    public static void RunScenario(List<Card> playerOneCards, List<Card> playerTwoCards, out int cards, out int tricks)
+    public static async Task<DealStatistics> RunScenario(List<Card> playerOneCards, List<Card> playerTwoCards)
     {
-        var playerTwo = false;
-
-        var penalty = 0;
-        tricks = 0;
-        cards = 0;
-        var pile = new List<Card>(52);
-
-        while (playerOneCards.Count > 0 && playerTwoCards.Count > 0)
+        return await Task.Run(() =>
         {
-            var card = playerTwo ? playerTwoCards[0] : playerOneCards[0];
-            pile.Add(card);
+            var dealStatistics = new DealStatistics();
+            var playerTwo = false;
 
-            if (playerTwo)
-                playerTwoCards.RemoveAt(0);
-            else
-                playerOneCards.RemoveAt(0);
+            var penalty = 0;
+            var tricks = 0;
+            var cards = 0;
+            var pile = new List<Card>(52);
 
-            cards++;
-
-            if (penalty > 0)
+            while (playerOneCards.Count > 0 && playerTwoCards.Count > 0)
             {
-                penalty--;
-                if (card.SimpleRank == '-')
+                var card = playerTwo ? playerTwoCards[0] : playerOneCards[0];
+                pile.Add(card);
+
+                if (playerTwo)
+                    playerTwoCards.RemoveAt(0);
+                else
+                    playerOneCards.RemoveAt(0);
+
+                cards++;
+
+                if (penalty > 0)
                 {
-                    if (penalty == 0)
+                    penalty--;
+                    if (card.SimpleRank == '-')
                     {
-                        tricks++;
-                        if (playerTwo)
+                        if (penalty == 0)
                         {
+                            tricks++;
+                            if (playerTwo)
+                            {
 
-                            playerOneCards.AddRange(pile);
-                        }
-                        else
-                        {
-                            playerTwoCards.AddRange(pile);
-                        }
+                                playerOneCards.AddRange(pile);
+                            }
+                            else
+                            {
+                                playerTwoCards.AddRange(pile);
+                            }
 
-                        pile.Clear();
-                        playerTwo = !playerTwo;
+                            pile.Clear();
+                            playerTwo = !playerTwo;
+                        }
+                        continue;
                     }
-                    continue;
                 }
+
+                switch (card.SimpleRank)
+                {
+                    case '-':
+                        break;
+                    case 'A':
+                        penalty = 4;
+                        break;
+                    case 'K':
+                        penalty = 3;
+                        break;
+                    case 'Q':
+                        penalty = 2;
+                        break;
+                    case 'J':
+                        penalty = 1;
+                        break;
+                }
+
+                playerTwo = !playerTwo;
             }
 
-            switch (card.SimpleRank)
+            if (pile.Count > 0)
             {
-                case '-':
-                    break;
-                case 'A':
-                    penalty = 4;
-                    break;
-                case 'K':
-                    penalty = 3;
-                    break;
-                case 'Q':
-                    penalty = 2;
-                    break;
-                case 'J':
-                    penalty = 1;
-                    break;
+                tricks++;
             }
 
-            playerTwo = !playerTwo;
-        }
+            dealStatistics.Cards = cards;
+            dealStatistics.Tricks = tricks;
 
-        if (pile.Count > 0)
-        {
-            tricks++;
-        }
+            return dealStatistics;
+        });
     }
 }

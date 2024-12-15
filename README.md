@@ -9,5 +9,5 @@ A Beggar-My-Neighbour runner to find long games and other curiosities
 ---
 
 *Created: 21 December 2022*  
-*Updated: 9 December 2024*
+*Updated: 15 December 2024*
 

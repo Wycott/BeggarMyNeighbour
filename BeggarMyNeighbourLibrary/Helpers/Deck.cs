@@ -2,57 +2,68 @@
 
 public static class Deck
 {
-    public static List<Card> Generate()
+    public static async Task<List<Card>> Generate()
     {
-        var retVal = new List<Card>(52);
-        for (var r = 0; r < 13; r++)
+        return await Task.Run(() =>
         {
-            for (var n = 0; n < 4; n++)
+            var retVal = new List<Card>(52);
+         
+            for (var r = 0; r < 13; r++)
             {
-                switch (r)
+                for (var n = 0; n < 4; n++)
                 {
-                    case 0:
-                        retVal.Add(new Card('A'));
-                        break;
-                    case 1:
-                        retVal.Add(new Card('K'));
-                        break;
-                    case 2:
-                        retVal.Add(new Card('Q'));
-                        break;
-                    case 3:
-                        retVal.Add(new Card('J'));
-                        break;
-                    default:
-                        retVal.Add(new Card('-'));
-                        break;
+                    switch (r)
+                    {
+                        case 0:
+                            retVal.Add(new Card('A'));
+                            break;
+                        case 1:
+                            retVal.Add(new Card('K'));
+                            break;
+                        case 2:
+                            retVal.Add(new Card('Q'));
+                            break;
+                        case 3:
+                            retVal.Add(new Card('J'));
+                            break;
+                        default:
+                            retVal.Add(new Card('-'));
+                            break;
+                    }
                 }
             }
-        }
 
-        return retVal;
+            return retVal;
+        });
     }
-
-    public static void GenerateStacks(out List<Card> playerOneStack, out List<Card> playerTwoStack, out string playerOneDeal, out string playerTwoDeal)
+    
+    public static async Task<Deal> GenerateStacks()
     {
-        playerOneStack = new List<Card>(26);
-        playerTwoStack = new List<Card>(26);
-        playerOneDeal = string.Empty;
-        playerTwoDeal = string.Empty;
+        var playerOneDeal = string.Empty;
+        var playerTwoDeal = string.Empty;
 
-        var deck = Generate().OrderBy(x => x.SortOrder);
+        var deckOfCards = await Generate();
+        var deck = deckOfCards.OrderBy(x => x.SortOrder);
 
-        playerOneStack = deck.Take(26).ToList();
-        playerTwoStack = deck.Skip(26).Take(26).ToList();
+        var playerOneCards = deck.Take(26).ToList();
+        var playerTwoCards = deck.Skip(26).Take(26).ToList();
 
-        foreach (var c in playerOneStack)
+        foreach (var c in playerOneCards)
         {
             playerOneDeal += c.SimpleRank.ToString();
         }
 
-        foreach (var c in playerTwoStack)
+        foreach (var c in playerTwoCards)
         {
             playerTwoDeal += c.SimpleRank.ToString();
         }
+
+        return new Deal
+        {
+            PlayerOneCards = playerOneCards,
+            PlayerTwoCards = playerTwoCards,
+            PlayerOneDeal = playerOneDeal,
+            PlayerTwoDeal = playerTwoDeal
+        };
     }
 }

@@ -1,12 +1,11 @@
 ﻿using BeggarMyNeighbourLibrary;
 using BeggarMyNeighbourLibrary.Helpers;
 
-
 namespace BeggarMyNeighbour;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main()
     {
         var maxCards = 0;
         var iterations = 0;
@@ -17,22 +16,22 @@ internal class Program
         while (true)
         {
             iterations++;
-            NormalPlay(out var cards, out var tricks, out var playerOneDeal, out var playerTwoDeal);
+            var dealResult = await NormalPlay();
 
-            if (cards <= maxCards)
+            if (dealResult.Cards <= maxCards)
             {
                 continue;
             }
 
             record++;
-            maxCards = cards;
-            var maxDecks = cards / 52;
+            maxCards = dealResult.Cards;
+            var maxDecks = dealResult.Cards / 52;
 
             var resultLine1 = $"{record}) {DateTime.Now}";
             var resultLine2 = $"After {iterations} iterations";
             var resultLine3 = $"Most cards played is {maxCards}";
             var resultLine4 = $"Most decks played is {maxDecks}";
-            var resultLine5 = $"Most tricks played is {tricks}";
+            var resultLine5 = $"Most tricks played is {dealResult.Tricks}";
             var resultLine8 = string.Empty;
 
             Output.WriteResults(fileNameStub,
@@ -41,33 +40,31 @@ internal class Program
                                 resultLine3,
                                 resultLine4,
                                 resultLine5,
-                                playerOneDeal,
-                                playerTwoDeal,
+                                dealResult.PlayerOneDeal,
+                                dealResult.PlayerTwoDeal,
                                 resultLine8);
         }
+        // ReSharper disable once FunctionNeverReturns
     }
 
-    private static void NormalPlay(out int cards, out int tricks, out string playerOneDeal, out string playerTwoDeal)
+    private static async Task<DealResult> NormalPlay()
     {
-        Deck.GenerateStacks(out var playerOneStack, out var playerTwoStack, out playerOneDeal, out playerTwoDeal);
-        Engine.RunScenario(playerOneStack, playerTwoStack, out cards, out tricks);
+        
+        var deal = await Deck.GenerateStacks();
+        return await Engine.RunScenario(deal.PlayerOneDeal, deal.PlayerTwoDeal);
     }
 
-    private static void ScenarioPlay1()
+    private static async Task<DealResult> ScenarioPlay1()
     {
-        Engine.RunScenario(
+        return await Engine.RunScenario(
             "---AJ--Q---------QAKQJJ-QK",
-            "-----A----KJ-K--------A---",
-            out var cards,
-            out var tricks);
+            "-----A----KJ-K--------A---");
     }
 
-    private static void ScenarioPlay2()
+    private static async Task<DealResult> ScenarioPlay2()
     {
-        Engine.RunScenario(
+        return await Engine.RunScenario(
             "----K---A--Q-A--JJA------J",
-            "-----KK---------A-JK-Q-Q-Q",
-            out var cards,
-            out var tricks);
+            "-----KK---------A-JK-Q-Q-Q");
     }
 }
