@@ -32,7 +32,6 @@ public static class Engine
     {
         return await Task.Run(() =>
         {
-            var dealStatistics = new DealStatistics();
             var playerTwo = false;
 
             var penalty = 0;
@@ -46,23 +45,28 @@ public static class Engine
                 pile.Add(card);
 
                 if (playerTwo)
+                {
                     playerTwoCards.RemoveAt(0);
+                }
                 else
+                {
                     playerOneCards.RemoveAt(0);
+                }
 
                 cards++;
 
                 if (penalty > 0)
                 {
                     penalty--;
+
                     if (card.SimpleRank == '-')
                     {
                         if (penalty == 0)
                         {
                             tricks++;
+
                             if (playerTwo)
                             {
-
                                 playerOneCards.AddRange(pile);
                             }
                             else
@@ -103,8 +107,11 @@ public static class Engine
                 tricks++;
             }
 
-            dealStatistics.Cards = cards;
-            dealStatistics.Tricks = tricks;
+            var dealStatistics = new DealStatistics
+            {
+                Cards = cards,
+                Tricks = tricks
+            };
 
             return dealStatistics;
         });
