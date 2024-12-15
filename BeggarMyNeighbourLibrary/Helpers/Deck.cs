@@ -2,12 +2,41 @@
 
 public static class Deck
 {
+    public static async Task<Deal> GenerateStacks()
+    {
+        var playerOneDeal = string.Empty;
+        var playerTwoDeal = string.Empty;
+
+        var deckOfCards = await Generate();
+
+        var playerOneCards = deckOfCards.OrderBy(x => x.SortOrder).Take(26).ToList();
+        var playerTwoCards = deckOfCards.OrderBy(x => x.SortOrder).Skip(26).Take(26).ToList();
+
+        foreach (var c in playerOneCards)
+        {
+            playerOneDeal += c.SimpleRank.ToString();
+        }
+
+        foreach (var c in playerTwoCards)
+        {
+            playerTwoDeal += c.SimpleRank.ToString();
+        }
+
+        return new Deal
+        {
+            PlayerOneCards = playerOneCards,
+            PlayerTwoCards = playerTwoCards,
+            PlayerOneDeal = playerOneDeal,
+            PlayerTwoDeal = playerTwoDeal
+        };
+    }
+
     public static async Task<List<Card>> Generate()
     {
         return await Task.Run(() =>
         {
             var retVal = new List<Card>(52);
-         
+
             for (var r = 0; r < 13; r++)
             {
                 for (var n = 0; n < 4; n++)
@@ -35,35 +64,5 @@ public static class Deck
 
             return retVal;
         });
-    }
-    
-    public static async Task<Deal> GenerateStacks()
-    {
-        var playerOneDeal = string.Empty;
-        var playerTwoDeal = string.Empty;
-
-        var deckOfCards = await Generate();
-        var deck = deckOfCards.OrderBy(x => x.SortOrder);
-
-        var playerOneCards = deck.Take(26).ToList();
-        var playerTwoCards = deck.Skip(26).Take(26).ToList();
-
-        foreach (var c in playerOneCards)
-        {
-            playerOneDeal += c.SimpleRank.ToString();
-        }
-
-        foreach (var c in playerTwoCards)
-        {
-            playerTwoDeal += c.SimpleRank.ToString();
-        }
-
-        return new Deal
-        {
-            PlayerOneCards = playerOneCards,
-            PlayerTwoCards = playerTwoCards,
-            PlayerOneDeal = playerOneDeal,
-            PlayerTwoDeal = playerTwoDeal
-        };
     }
 }

@@ -49,7 +49,7 @@ internal class Program
 
     private static async Task<DealResult> NormalPlay()
     {
-        
+
         var deal = await Deck.GenerateStacks();
         return await Engine.RunScenario(deal.PlayerOneDeal, deal.PlayerTwoDeal);
     }
