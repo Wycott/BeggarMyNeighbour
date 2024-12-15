@@ -81,23 +81,7 @@ public static class Engine
                     }
                 }
 
-                switch (card.SimpleRank)
-                {
-                    case '-':
-                        break;
-                    case 'A':
-                        penalty = 4;
-                        break;
-                    case 'K':
-                        penalty = 3;
-                        break;
-                    case 'Q':
-                        penalty = 2;
-                        break;
-                    case 'J':
-                        penalty = 1;
-                        break;
-                }
+                penalty = CalculatePenalty(card, penalty);
 
                 playerTwo = !playerTwo;
             }
@@ -115,5 +99,28 @@ public static class Engine
 
             return dealStatistics;
         });
+    }
+
+    private static int CalculatePenalty(Card card, int penalty)
+    {
+        switch (card.SimpleRank)
+        {
+            case '-':
+                break;
+            case 'A':
+                penalty = 4;
+                break;
+            case 'K':
+                penalty = 3;
+                break;
+            case 'Q':
+                penalty = 2;
+                break;
+            case 'J':
+                penalty = 1;
+                break;
+        }
+
+        return penalty;
     }
 }
