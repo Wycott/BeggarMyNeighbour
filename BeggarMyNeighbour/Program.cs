@@ -29,8 +29,8 @@ internal partial class Program
         var resultLine8 = string.Empty;
 
         Output.WriteResults(fileNameStub,
-            resultLine0,
             resultLine1,
+            resultLine0,
             resultLine2,
             resultLine3,
             resultLine4,
