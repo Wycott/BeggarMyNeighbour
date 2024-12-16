@@ -19,7 +19,7 @@ internal partial class Program
         var maxDecks = dealResult.Cards / 52;
 
         var resultLine0 = sw.ElapsedMilliseconds >= 60000
-            ? $"Runtime: {sw.ElapsedMilliseconds / 60000} mins"
+            ? $"Runtime: {sw.ElapsedMilliseconds / 60000:N0} mins"
             : $"Runtime: {sw.ElapsedMilliseconds / 1000} secs";
         var resultLine1 = $"{record}) {DateTime.Now}";
         var resultLine2 = $"After {iterations:N0} iterations";
