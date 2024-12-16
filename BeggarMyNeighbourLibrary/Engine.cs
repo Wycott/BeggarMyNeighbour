@@ -1,23 +1,26 @@
-﻿namespace BeggarMyNeighbourLibrary;
+﻿using System.Collections.Concurrent;
+
+namespace BeggarMyNeighbourLibrary;
 
 public static class Engine
 {
     public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
     {
-        var playerOneCards = new List<Card>(26);
-        var playerTwoCards = new List<Card>(26);
+        var playerOneCards = new ConcurrentBag<Card>();
+        var playerTwoCards = new ConcurrentBag<Card>();
 
-        foreach (var c in playerOneCardString)
+        Parallel.ForEach(playerOneCardString, c =>
         {
             playerOneCards.Add(new Card(c));
-        }
+        });
 
-        foreach (var c in playerTwoCardString)
+        Parallel.ForEach(playerTwoCardString, c =>
         {
             playerTwoCards.Add(new Card(c));
-        }
 
-        var dealStatistics = await RunScenario(playerOneCards, playerTwoCards);
+        });
+
+        var dealStatistics = await RunScenario(playerOneCards.ToList(), playerTwoCards.ToList());
 
         return new DealResult
         {
@@ -27,6 +30,32 @@ public static class Engine
             Tricks = dealStatistics.Tricks
         };
     }
+
+    //public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
+    //{
+    //    var playerOneCards = new List<Card>(26);
+    //    var playerTwoCards = new List<Card>(26);
+
+    //    foreach (var c in playerOneCardString)
+    //    {
+    //        playerOneCards.Add(new Card(c));
+    //    }
+
+    //    foreach (var c in playerTwoCardString)
+    //    {
+    //        playerTwoCards.Add(new Card(c));
+    //    }
+
+    //    var dealStatistics = await RunScenario(playerOneCards, playerTwoCards);
+
+    //    return new DealResult
+    //    {
+    //        PlayerOneDeal = playerOneCardString,
+    //        PlayerTwoDeal = playerTwoCardString,
+    //        Cards = dealStatistics.Cards,
+    //        Tricks = dealStatistics.Tricks
+    //    };
+    //}
 
     public static async Task<DealStatistics> RunScenario(List<Card> playerOneCards, List<Card> playerTwoCards)
     {
@@ -54,6 +83,13 @@ public static class Engine
                 }
 
                 cards++;
+
+                // Best known is 8344 as of 16 December 2024.
+                if (cards > 20000)
+                {
+                    Console.WriteLine("Looping. Exiting. ");
+                    Environment.Exit(0);
+                }
 
                 if (penalty > 0)
                 {

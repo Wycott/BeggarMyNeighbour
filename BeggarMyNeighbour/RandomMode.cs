@@ -8,7 +8,7 @@ namespace BeggarMyNeighbour
     {
         private static async Task RandomMode()
         {
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
             sw.Start();
 
             var maxCards = 0;

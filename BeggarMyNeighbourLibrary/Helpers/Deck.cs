@@ -1,4 +1,6 @@
-﻿namespace BeggarMyNeighbourLibrary.Helpers;
+﻿using System.Collections.Concurrent;
+
+namespace BeggarMyNeighbourLibrary.Helpers;
 
 public static class Deck
 {
@@ -13,20 +15,24 @@ public static class Deck
     {
         return await Task.Run(() =>
         {
-            var playerOneDeal = string.Empty;
-            var playerTwoDeal = string.Empty;
             var playerOneCards = deckOfCards.OrderBy(x => x.SortOrder).Take(26).ToList();
             var playerTwoCards = deckOfCards.OrderBy(x => x.SortOrder).Skip(26).Take(26).ToList();
 
-            foreach (var c in playerOneCards)
-            {
-                playerOneDeal += c.SimpleRank.ToString();
-            }
+            var playerOneDealBag = new ConcurrentBag<string>();
+            var playerTwoDealBag = new ConcurrentBag<string>();
 
-            foreach (var c in playerTwoCards)
+            Parallel.ForEach(playerOneCards, c =>
             {
-                playerTwoDeal += c.SimpleRank.ToString();
-            }
+                playerOneDealBag.Add(c.SimpleRank.ToString());
+            });
+
+            Parallel.ForEach(playerTwoCards, c =>
+            {
+                playerTwoDealBag.Add(c.SimpleRank.ToString());
+            });
+
+            var playerOneDeal = string.Join("", playerOneDealBag);
+            var playerTwoDeal = string.Join("", playerTwoDealBag);
 
             return new Deal
             {
@@ -37,6 +43,35 @@ public static class Deck
             };
         });
     }
+
+    //public static async Task<Deal> CreateDealFromDeck(List<Card> deckOfCards)
+    //{
+    //    return await Task.Run(() =>
+    //    {
+    //        var playerOneDeal = string.Empty;
+    //        var playerTwoDeal = string.Empty;
+    //        var playerOneCards = deckOfCards.OrderBy(x => x.SortOrder).Take(26).ToList();
+    //        var playerTwoCards = deckOfCards.OrderBy(x => x.SortOrder).Skip(26).Take(26).ToList();
+
+    //        foreach (var c in playerOneCards)
+    //        {
+    //            playerOneDeal += c.SimpleRank.ToString();
+    //        }
+
+    //        foreach (var c in playerTwoCards)
+    //        {
+    //            playerTwoDeal += c.SimpleRank.ToString();
+    //        }
+
+    //        return new Deal
+    //        {
+    //            PlayerOneCards = playerOneCards,
+    //            PlayerTwoCards = playerTwoCards,
+    //            PlayerOneDeal = playerOneDeal,
+    //            PlayerTwoDeal = playerTwoDeal
+    //        };
+    //    });
+    //}
 
     public static async Task<List<Card>> Generate()
     {
