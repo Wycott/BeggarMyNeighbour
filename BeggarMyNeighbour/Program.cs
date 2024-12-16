@@ -1,40 +1,26 @@
-﻿using BeggarMyNeighbourLibrary;
+﻿using System.Diagnostics;
+using BeggarMyNeighbourLibrary;
 using BeggarMyNeighbourLibrary.Helpers;
 
 namespace BeggarMyNeighbour;
 
-internal class Program
+internal partial class Program
 {
     private static async Task Main()
     {
-        var maxCards = 0;
-        var iterations = 0;
-        var record = 0;
-
-        var fileNameStub = Guid.NewGuid().ToString();
-
-        while (true)
-        {
-            iterations++;
-            var dealResult = await NormalPlay();
-
-            if (dealResult.Cards <= maxCards)
-            {
-                continue;
-            }
-
-            maxCards = OutputBestResultSoFar(dealResult, iterations, fileNameStub, ref record);
-        }
-        // ReSharper disable once FunctionNeverReturns
+        await RandomMode();
     }
 
-    private static int OutputBestResultSoFar(DealResult dealResult, int iterations, string fileNameStub, ref int record)
+    private static int OutputBestResultSoFar(DealResult dealResult, int iterations, string fileNameStub, ref int record, Stopwatch sw)
     {
         record++;
         
         var maxCards = dealResult.Cards;
         var maxDecks = dealResult.Cards / 52;
 
+        var resultLine0 = sw.ElapsedMilliseconds >= 60000
+            ? $"Runtime: {sw.ElapsedMilliseconds / 60000} mins"
+            : $"Runtime: {sw.ElapsedMilliseconds / 1000} secs";
         var resultLine1 = $"{record}) {DateTime.Now}";
         var resultLine2 = $"After {iterations:N0} iterations";
         var resultLine3 = $"Most cards played is {maxCards:N0}";
@@ -43,6 +29,7 @@ internal class Program
         var resultLine8 = string.Empty;
 
         Output.WriteResults(fileNameStub,
+            resultLine0,
             resultLine1,
             resultLine2,
             resultLine3,
@@ -53,14 +40,6 @@ internal class Program
             resultLine8);
 
         return maxCards;
-    }
-
-    private static async Task<DealResult> NormalPlay()
-    {
-
-        var deal = await Deck.GenerateStacks();
-
-        return await Engine.RunScenario(deal.PlayerOneDeal, deal.PlayerTwoDeal);
     }
 
     private static async Task<DealResult> ScenarioPlay1()
