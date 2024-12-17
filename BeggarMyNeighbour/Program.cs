@@ -14,7 +14,7 @@ internal partial class Program
     private static int OutputBestResultSoFar(DealResult dealResult, int iterations, string fileNameStub, ref int record, Stopwatch sw)
     {
         record++;
-        
+
         var maxCards = dealResult.Cards;
         var maxDecks = dealResult.Cards / 52;
 

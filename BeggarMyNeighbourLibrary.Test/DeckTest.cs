@@ -7,9 +7,11 @@ public class DeckTest
     [Fact]
     public async void Test1()
     {
+        const int FullDeckSize = 52;
+
         var res = await Deck.Generate();
 
-        Assert.Equal(52, res.Count);
+        Assert.Equal(FullDeckSize, res.Count);
     }
 
     [Fact]
