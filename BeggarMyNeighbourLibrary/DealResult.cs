@@ -17,17 +17,7 @@
 
         private static int CountCharacterInstances(string input, char charToCount)
         {
-            var count = 0;
-
-            foreach (var c in input)
-            {
-                if (c == charToCount)
-                {
-                    count++;
-                }
-            }
-
-            return count;
+            return input.Count(c => c == charToCount);
         }
     }
 }
