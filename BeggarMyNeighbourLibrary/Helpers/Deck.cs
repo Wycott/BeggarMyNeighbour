@@ -44,35 +44,6 @@ public static class Deck
         });
     }
 
-    //public static async Task<Deal> CreateDealFromDeck(List<Card> deckOfCards)
-    //{
-    //    return await Task.Run(() =>
-    //    {
-    //        var playerOneDeal = string.Empty;
-    //        var playerTwoDeal = string.Empty;
-    //        var playerOneCards = deckOfCards.OrderBy(x => x.SortOrder).Take(26).ToList();
-    //        var playerTwoCards = deckOfCards.OrderBy(x => x.SortOrder).Skip(26).Take(26).ToList();
-
-    //        foreach (var c in playerOneCards)
-    //        {
-    //            playerOneDeal += c.SimpleRank.ToString();
-    //        }
-
-    //        foreach (var c in playerTwoCards)
-    //        {
-    //            playerTwoDeal += c.SimpleRank.ToString();
-    //        }
-
-    //        return new Deal
-    //        {
-    //            PlayerOneCards = playerOneCards,
-    //            PlayerTwoCards = playerTwoCards,
-    //            PlayerOneDeal = playerOneDeal,
-    //            PlayerTwoDeal = playerTwoDeal
-    //        };
-    //    });
-    //}
-
     public static async Task<List<Card>> Generate()
     {
         return await Task.Run(() =>

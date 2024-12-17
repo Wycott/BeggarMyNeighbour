@@ -1,9 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Collections;
+using System.Collections.Concurrent;
 
 namespace BeggarMyNeighbourLibrary;
 
 public static class Engine
 {
+    private const int FullDeckSize = 52;
+
     public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
     {
         var playerOneCards = new ConcurrentBag<Card>();
@@ -27,35 +30,11 @@ public static class Engine
             PlayerOneDeal = playerOneCardString,
             PlayerTwoDeal = playerTwoCardString,
             Cards = dealStatistics.Cards,
-            Tricks = dealStatistics.Tricks
+            Tricks = dealStatistics.Tricks,
+            PlayerOneOutcome = dealStatistics.PlayerOneOutcome,
+            PlayerTwoOutcome = dealStatistics.PlayerTwoOutcome
         };
     }
-
-    //public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
-    //{
-    //    var playerOneCards = new List<Card>(26);
-    //    var playerTwoCards = new List<Card>(26);
-
-    //    foreach (var c in playerOneCardString)
-    //    {
-    //        playerOneCards.Add(new Card(c));
-    //    }
-
-    //    foreach (var c in playerTwoCardString)
-    //    {
-    //        playerTwoCards.Add(new Card(c));
-    //    }
-
-    //    var dealStatistics = await RunScenario(playerOneCards, playerTwoCards);
-
-    //    return new DealResult
-    //    {
-    //        PlayerOneDeal = playerOneCardString,
-    //        PlayerTwoDeal = playerTwoCardString,
-    //        Cards = dealStatistics.Cards,
-    //        Tricks = dealStatistics.Tricks
-    //    };
-    //}
 
     public static async Task<DealStatistics> RunScenario(List<Card> playerOneCards, List<Card> playerTwoCards)
     {
@@ -66,7 +45,7 @@ public static class Engine
             var penalty = 0;
             var tricks = 0;
             var cards = 0;
-            var pile = new List<Card>(52);
+            var pile = new List<Card>(FullDeckSize);
 
             while (playerOneCards.Count > 0 && playerTwoCards.Count > 0)
             {
@@ -130,11 +109,18 @@ public static class Engine
             var dealStatistics = new DealStatistics
             {
                 Cards = cards,
-                Tricks = tricks
+                Tricks = tricks,
+                PlayerOneOutcome = CalculateOutcome(playerOneCards, pile),
+                PlayerTwoOutcome = CalculateOutcome(playerTwoCards, pile),
             };
 
             return dealStatistics;
         });
+    }
+
+    private static string CalculateOutcome(ICollection playerStack, ICollection pileStack)
+    {
+        return playerStack.Count + pileStack.Count == FullDeckSize ? "Win" : "Lose";
     }
 
     private static int CalculatePenalty(Card card, int penalty)

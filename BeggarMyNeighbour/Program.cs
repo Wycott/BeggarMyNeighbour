@@ -35,8 +35,8 @@ internal partial class Program
             resultLine3,
             resultLine4,
             resultLine5,
-            dealResult.PlayerOneDeal,
-            dealResult.PlayerTwoDeal,
+            dealResult.PlayerOneDeal + $" {dealResult.PlayerOneSuits} " + dealResult.PlayerOneOutcome,
+            dealResult.PlayerTwoDeal + $" {dealResult.PlayerTwoSuits} " + dealResult.PlayerTwoOutcome,
             resultLine8);
 
         return maxCards;
