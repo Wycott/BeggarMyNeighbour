@@ -13,7 +13,7 @@ public static class Engine
 
         var playerTwoCards = playerTwoCardString.Select(c => new Card(c)).ToList();
 
-        var dealStatistics = await RunScenario(playerOneCards.ToList(), playerTwoCards.ToList());
+        var dealStatistics = await RunScenario(playerOneCards, playerTwoCards);
 
         return new DealResult
         {
