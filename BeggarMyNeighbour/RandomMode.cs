@@ -38,12 +38,12 @@ internal partial class Program
 
         var maxCards = dealResult.Cards;
         var maxDecks = dealResult.Cards / 52;
-
+        var secs = Math.Max(sw.ElapsedMilliseconds / 1000, 1);
         var resultLine0 = sw.ElapsedMilliseconds >= 60000
             ? $"Runtime {sw.ElapsedMilliseconds / 60000:N0} mins"
-            : $"Runtime {sw.ElapsedMilliseconds / 1000} secs";
+            : $"Runtime {secs} secs";
         var resultLine1 = $"{record}) {DateTime.Now}";
-        var resultLine2 = $"After {iterations:N0} iterations";
+        var resultLine2 = $"After {iterations:N0} iterations ({iterations/secs:N0}/s)";
         var resultLine3 = $"Most cards played is {maxCards:N0}";
         var resultLine4 = $"Most decks played is {maxDecks:N0}";
         var resultLine5 = $"Most tricks played is {dealResult.Tricks:N0}";
