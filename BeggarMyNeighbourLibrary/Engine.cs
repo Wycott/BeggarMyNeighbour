@@ -100,18 +100,15 @@ public static class Engine
             {
                 Cards = cards,
                 Tricks = tricks,
-                PlayerOneOutcome = CalculateOutcome(playerOneCards, pile),
-                PlayerTwoOutcome = CalculateOutcome(playerTwoCards, pile),
+                PlayerOneOutcome = playerOneCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
+                PlayerTwoOutcome = playerTwoCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
             };
 
             return dealStatistics;
         });
     }
 
-    private static string CalculateOutcome(ICollection playerStack, ICollection pileStack)
-    {
-        return playerStack.Count + pileStack.Count == FullDeckSize ? "Win" : "Lose";
-    }
+
 
     private static int CalculatePenalty(Card card, int penalty)
     {

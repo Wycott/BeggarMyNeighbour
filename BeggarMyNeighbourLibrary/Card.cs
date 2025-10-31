@@ -1,13 +1,7 @@
 ﻿namespace BeggarMyNeighbourLibrary;
 
-public class Card
+public record Card(char SimpleRank)
 {
-    public Card(char simpleRank)
-    {
-        SimpleRank = simpleRank;
-        SortOrder = Guid.NewGuid().ToString();
-    }
-
-    public char SimpleRank { get; set; }
-    public string SortOrder { get; set; }
+    public char SimpleRank { get; set; } = SimpleRank;
+    public string SortOrder { get; set; } = Guid.NewGuid().ToString();
 }
