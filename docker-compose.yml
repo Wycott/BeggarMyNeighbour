@@ -1,0 +1,7 @@
+services:
+  beggarmyneighbour:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beggarmyneighbour
+    restart: unless-stopped
