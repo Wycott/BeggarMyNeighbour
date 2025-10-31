@@ -105,8 +105,6 @@ public static class Engine
         });
     }
 
-
-
     private static int CalculatePenalty(Card card, int penalty)
     {
         switch (card.SimpleRank)
