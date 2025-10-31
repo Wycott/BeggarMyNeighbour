@@ -9,19 +9,9 @@ public static class Engine
 
     public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
     {
-        var playerOneCards = new ConcurrentBag<Card>();
-        var playerTwoCards = new ConcurrentBag<Card>();
+        var playerOneCards = playerOneCardString.Select(c => new Card(c)).ToList();
 
-        Parallel.ForEach(playerOneCardString, c =>
-        {
-            playerOneCards.Add(new Card(c));
-        });
-
-        Parallel.ForEach(playerTwoCardString, c =>
-        {
-            playerTwoCards.Add(new Card(c));
-
-        });
+        var playerTwoCards = playerTwoCardString.Select(c => new Card(c)).ToList();
 
         var dealStatistics = await RunScenario(playerOneCards.ToList(), playerTwoCards.ToList());
 
