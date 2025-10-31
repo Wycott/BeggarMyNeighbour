@@ -3,7 +3,7 @@
 public class DealResultTest
 {
     [Fact]
-    public void GenerateStacks_CreatesTwoStacksOfCards()
+    public void PropertiesAndMethods()
     {
         const int Tricks = 1164;
         const int Cards = 8344;
