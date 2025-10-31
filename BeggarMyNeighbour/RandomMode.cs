@@ -43,10 +43,10 @@ internal partial class Program
             ? $"Runtime {sw.ElapsedMilliseconds / 60000:N0} mins"
             : $"Runtime {secs} secs";
         var resultLine1 = $"{record}) {DateTime.Now}";
-        var resultLine2 = $"After {iterations:N0} iterations ({iterations/secs:N0}/s)";
-        var resultLine3 = $"Most cards played is {maxCards:N0}";
-        var resultLine4 = $"Most decks played is {maxDecks:N0}";
-        var resultLine5 = $"Most tricks played is {dealResult.Tricks:N0}";
+        var resultLine2 = $"Iters {iterations:N0} ({iterations/secs:N0}/s)";
+        var resultLine3 = $"Cards played {maxCards:N0}";
+        var resultLine4 = $"Decks played {maxDecks:N0}";
+        var resultLine5 = $"Tricks played {dealResult.Tricks:N0}";
         var resultLine8 = string.Empty;
 
         Output.WriteResults(fileNameStub,
