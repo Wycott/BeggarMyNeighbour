@@ -31,4 +31,19 @@ public class EngineTest
         Assert.Equal(ExpectedTricks, res.Tricks);
         Assert.Equal(ExpectedCards, res.Cards);
     }
+
+    [Fact]
+    public async void RunScenario_RandomOutput_ReturnsExpectedTricksAndCards()
+    {
+        const int ExpectedTricks = 432;
+        const int ExpectedCards = 3180;
+
+        const string PlayerOneDeal = "J-Q---K-K---K-----AA-A---A";
+        const string PlayerTwoDeal = "Q--------J--QK-----Q-JJ---";
+
+        var res = await Engine.RunScenario(PlayerOneDeal, PlayerTwoDeal);
+
+        Assert.Equal(ExpectedTricks, res.Tricks);
+        Assert.Equal(ExpectedCards, res.Cards);
+    }
 }

@@ -12,6 +12,7 @@ internal partial class Program
         sw.Start();
 
         var maxCards = 0;
+        var maxTricks = 0;
         var iterations = 0;
         var record = 0;
 
@@ -22,17 +23,29 @@ internal partial class Program
             iterations++;
             var dealResult = await RandomPlay();
 
-            if (dealResult.Cards <= maxCards)
+            var newBest = false;
+
+            if (dealResult.Cards > maxCards)
             {
-                continue;
+                maxCards = dealResult.Cards;
+                newBest = true;
             }
 
-            maxCards = OutputBestResultSoFar(dealResult, iterations, fileNameStub, ref record, sw);
+            if (dealResult.Tricks > maxTricks)
+            {
+                maxTricks = dealResult.Tricks;
+                newBest = true;
+            } 
+
+            if (newBest)
+            {
+                OutputBestResultSoFar(dealResult, iterations, fileNameStub, ref record, sw);
+            }
         }
         // ReSharper disable once FunctionNeverReturns
     }
 
-    private static int OutputBestResultSoFar(DealResult dealResult, int iterations, string fileNameStub, ref int record, Stopwatch sw)
+    private static void OutputBestResultSoFar(DealResult dealResult, int iterations, string fileNameStub, ref int record, Stopwatch sw)
     {
         record++;
 
@@ -59,8 +72,6 @@ internal partial class Program
             dealResult.PlayerOneDeal + $" {dealResult.PlayerOneSuits} " + dealResult.PlayerOneOutcome,
             dealResult.PlayerTwoDeal + $" {dealResult.PlayerTwoSuits} " + dealResult.PlayerTwoOutcome,
             resultLine8);
-
-        return maxCards;
     }
 
     private static async Task<DealResult> RandomPlay()
