@@ -9,7 +9,12 @@ jobs:
         
       - name: Checkout
         uses: actions/checkout@v1
-        
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'  # Targeting .NET 10
+      
       - name: NuGet Restore
         run: dotnet restore $Env:GITHUB_WORKSPACE\BeggarMyNeighbour.sln          
                            
