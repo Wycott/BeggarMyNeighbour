@@ -6,7 +6,7 @@ namespace BeggarMyNeighbour;
 
 internal partial class Program
 {
-    private static long bestRate = 0;
+    private static long bestRate;
 
     private static readonly Dictionary<string, string> ReleaseNotes = new()
     {
@@ -76,7 +76,7 @@ internal partial class Program
             : $"Runtime {secs} secs";
         var resultLine1 = $"{record}) {DateTime.Now}";
         var resultLine2 = $"Iters {iterations:N0} ({rate:N0}/s)";
-        var resultLine2b = $"Best rate {bestRate:N0}";
+        var resultLine2B = $"Best rate {bestRate:N0}";
         var resultLine3 = $"Cards played {maxCards:N0}";
         var resultLine4 = $"Decks played {maxDecks:N0}";
         var resultLine5 = $"Tricks played {dealResult.Tricks:N0}";
@@ -87,7 +87,7 @@ internal partial class Program
             resultLine1,
             resultLine0,
             resultLine2,
-            resultLine2b,
+            resultLine2B,
             resultLine3,
             resultLine4,
             resultLine5,

@@ -26,7 +26,7 @@ public class DealResultTest
             PlayerOneOutcome = PlayerOneOutcome,
             PlayerTwoOutcome = PlayerTwoOutcome
         };
-            
+
         Assert.Equal(Tricks, dealResult.Tricks);
         Assert.Equal(Cards, dealResult.Cards);
         Assert.Equal(PlayerOneDeal, dealResult.PlayerOneDeal);

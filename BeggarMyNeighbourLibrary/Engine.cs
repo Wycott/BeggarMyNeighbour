@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace BeggarMyNeighbourLibrary;
+﻿namespace BeggarMyNeighbourLibrary;
 
 public static class Engine
 {

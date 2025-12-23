@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-namespace BeggarMyNeighbourLibrary.Helpers;
+﻿namespace BeggarMyNeighbourLibrary.Helpers;
 
 public static class Deck
 {

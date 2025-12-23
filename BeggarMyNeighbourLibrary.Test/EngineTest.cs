@@ -22,7 +22,7 @@ public class EngineTest
     {
         const int ExpectedTricks = 1106;
         const int ExpectedCards = 7972;
-            
+
         const string PlayerOneDeal = "----K---A--Q-A--JJA------J";
         const string PlayerTwoDeal = "-----KK---------A-JK-Q-Q-Q";
 
