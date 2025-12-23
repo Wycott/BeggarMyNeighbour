@@ -10,5 +10,5 @@ A Beggar-My-Neighbour runner to find long games and other curiosities
 ---
 
 *Created: 21 December 2022*  
-*Updated: 14 November 2025*
+*Updated: 23 December 2025*
 

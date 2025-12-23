@@ -13,7 +13,7 @@ internal partial class Program
 
         var maxCards = 0;
         var maxTricks = 0;
-        var iterations = 0;
+        var iterations = 0L;
         var record = 0;
 
         var fileNameStub = Guid.NewGuid().ToString();
@@ -35,7 +35,7 @@ internal partial class Program
             {
                 maxTricks = dealResult.Tricks;
                 newBest = true;
-            } 
+            }
 
             if (newBest)
             {
@@ -45,8 +45,17 @@ internal partial class Program
         // ReSharper disable once FunctionNeverReturns
     }
 
-    private static void OutputBestResultSoFar(DealResult dealResult, int iterations, string fileNameStub, ref int record, Stopwatch sw)
+    private static void OutputBestResultSoFar(DealResult dealResult, long iterations, string fileNameStub, ref int record, Stopwatch sw)
     {
+        // TODO: Change this every time a new image is built so we can track different versions
+        var releaseNotes = new Dictionary<string, string>
+        {
+            {"Damp squib", "14 November 2025 - Initial cut"},
+            {"Night goose", "23 December 2025 - Change Iters calculation to long as it overran"}
+        };
+
+        var releaseCodeName = releaseNotes.Keys.Last();
+
         record++;
 
         var maxCards = dealResult.Cards;
@@ -56,10 +65,11 @@ internal partial class Program
             ? $"Runtime {sw.ElapsedMilliseconds / 60000:N0} mins"
             : $"Runtime {secs} secs";
         var resultLine1 = $"{record}) {DateTime.Now}";
-        var resultLine2 = $"Iters {iterations:N0} ({iterations/secs:N0}/s)";
+        var resultLine2 = $"Iters {iterations:N0} ({iterations / secs:N0}/s)";
         var resultLine3 = $"Cards played {maxCards:N0}";
         var resultLine4 = $"Decks played {maxDecks:N0}";
         var resultLine5 = $"Tricks played {dealResult.Tricks:N0}";
+        var resultLine6 = releaseCodeName;
         var resultLine8 = string.Empty;
 
         Output.WriteResults(fileNameStub,
@@ -71,6 +81,7 @@ internal partial class Program
             resultLine5,
             dealResult.PlayerOneDeal + $" {dealResult.PlayerOneSuits} " + dealResult.PlayerOneOutcome,
             dealResult.PlayerTwoDeal + $" {dealResult.PlayerTwoSuits} " + dealResult.PlayerTwoOutcome,
+            resultLine6,
             resultLine8);
     }
 
