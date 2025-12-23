@@ -3,7 +3,7 @@
 public class EngineTest
 {
     [Fact]
-    public async void RunScenario_LongestRun_ReturnsExpectedTricksAndCards()
+    public async Task RunScenario_LongestRun_ReturnsExpectedTricksAndCards()
     {
         const int ExpectedTricks = 1164;
         const int ExpectedCards = 8344;
@@ -18,7 +18,7 @@ public class EngineTest
     }
 
     [Fact]
-    public async void RunScenario_2ndLongestRun_ReturnsExpectedTricksAndCards()
+    public async Task RunScenario_2ndLongestRun_ReturnsExpectedTricksAndCards()
     {
         const int ExpectedTricks = 1106;
         const int ExpectedCards = 7972;
@@ -33,7 +33,7 @@ public class EngineTest
     }
 
     [Fact]
-    public async void RunScenario_RandomOutput_ReturnsExpectedTricksAndCards()
+    public async Task RunScenario_RandomOutput_ReturnsExpectedTricksAndCards()
     {
         const int ExpectedTricks = 432;
         const int ExpectedCards = 3180;

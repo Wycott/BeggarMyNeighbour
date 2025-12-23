@@ -5,7 +5,7 @@ namespace BeggarMyNeighbourLibrary.Test;
 public class DeckTest
 {
     [Fact]
-    public async void Generate_CreatesAFullDeck()
+    public async Task Generate_CreatesAFullDeck()
     {
         const int FullDeckSize = 52;
 
@@ -15,7 +15,7 @@ public class DeckTest
     }
 
     [Fact]
-    public async void GenerateStacks_CreatesTwoStacksOfCards()
+    public async Task GenerateStacks_CreatesTwoStacksOfCards()
     {
         const int ExpectedLength = 26;
 
