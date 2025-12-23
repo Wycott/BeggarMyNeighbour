@@ -15,8 +15,8 @@ public static class Deck
     {
         return await Task.Run(() =>
         {
-            var playerOneCards = deckOfCards.OrderBy(x => x.SortOrder).Take(26).ToList();
-            var playerTwoCards = deckOfCards.OrderBy(x => x.SortOrder).Skip(26).Take(26).ToList();
+            var playerOneCards = deckOfCards.OrderBy(x => Guid.NewGuid()).Take(26).ToList();
+            var playerTwoCards = deckOfCards.OrderBy(x => Guid.NewGuid()).Skip(26).Take(26).ToList();
 
             var playerOneDealBag = new ConcurrentBag<string>();
             var playerTwoDealBag = new ConcurrentBag<string>();
