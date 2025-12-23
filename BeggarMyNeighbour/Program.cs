@@ -2,8 +2,8 @@
 
 internal partial class Program
 {
-    private static async Task Main()
+    private static void Main()
     {
-        await RandomMode();
+        RandomMode();
     }
 }

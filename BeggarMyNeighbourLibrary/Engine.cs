@@ -1,16 +1,26 @@
-﻿namespace BeggarMyNeighbourLibrary;
+﻿using System.Collections;
+
+namespace BeggarMyNeighbourLibrary;
 
 public static class Engine
 {
     private const int FullDeckSize = 52;
 
-    public static async Task<DealResult> RunScenario(string playerOneCardString, string playerTwoCardString)
+    public static DealResult RunScenario(string playerOneCardString, string playerTwoCardString)
     {
-        var playerOneCards = playerOneCardString.Select(c => new Card(c)).ToList();
+        //var playerOneCards = playerOneCardString.Select(c => new Card(c)).ToList();
 
-        var playerTwoCards = playerTwoCardString.Select(c => new Card(c)).ToList();
+        //var playerTwoCards = playerTwoCardString.Select(c => new Card(c)).ToList();
 
-        var dealStatistics = await RunScenario(playerOneCards, playerTwoCards);
+        var playerOneCards = new Queue<Card>(
+            playerOneCardString.Select(c => new Card(c))
+        );
+
+        var playerTwoCards = new Queue<Card>(
+            playerTwoCardString.Select(c => new Card(c))
+        );
+
+        var dealStatistics = RunScenario(playerOneCards, playerTwoCards);
 
         return new DealResult
         {
@@ -23,86 +33,88 @@ public static class Engine
         };
     }
 
-    public static async Task<DealStatistics> RunScenario(List<Card> playerOneCards, List<Card> playerTwoCards)
+    public static DealStatistics RunScenario(Queue<Card> playerOneCards, Queue<Card> playerTwoCards)
     {
-        return await Task.Run(() =>
+        var playerTwo = false;
+
+        var penalty = 0;
+        var tricks = 0;
+        var cards = 0;
+        var pile = new Queue<Card>(FullDeckSize);
+
+        while (playerOneCards.Count > 0 && playerTwoCards.Count > 0)
         {
-            var playerTwo = false;
+            //var card = playerTwo ? playerTwoCards[0] : playerOneCards[0];
+            var card = playerTwo ? playerTwoCards.Peek() : playerOneCards.Peek();
+            pile.Enqueue(card);
 
-            var penalty = 0;
-            var tricks = 0;
-            var cards = 0;
-            var pile = new List<Card>(FullDeckSize);
-
-            while (playerOneCards.Count > 0 && playerTwoCards.Count > 0)
+            if (playerTwo)
             {
-                var card = playerTwo ? playerTwoCards[0] : playerOneCards[0];
-                pile.Add(card);
+                playerTwoCards.Dequeue();
+            }
+            else
+            {
+                playerOneCards.Dequeue();
+            }
 
-                if (playerTwo)
+            cards++;
+
+            // Best known is 8344 as of 16 December 2024.
+            if (cards > 20000)
+            {
+                Console.WriteLine("Looping. Exiting. ");
+                Environment.Exit(0);
+            }
+
+            if (penalty > 0)
+            {
+                penalty--;
+
+                if (card.SimpleRank == '-')
                 {
-                    playerTwoCards.RemoveAt(0);
-                }
-                else
-                {
-                    playerOneCards.RemoveAt(0);
-                }
-
-                cards++;
-
-                // Best known is 8344 as of 16 December 2024.
-                if (cards > 20000)
-                {
-                    Console.WriteLine("Looping. Exiting. ");
-                    Environment.Exit(0);
-                }
-
-                if (penalty > 0)
-                {
-                    penalty--;
-
-                    if (card.SimpleRank == '-')
+                    if (penalty == 0)
                     {
-                        if (penalty == 0)
+                        tricks++;
+
+
+                        if (playerTwo)
                         {
-                            tricks++;
-
-                            if (playerTwo)
-                            {
-                                playerOneCards.AddRange(pile);
-                            }
-                            else
-                            {
-                                playerTwoCards.AddRange(pile);
-                            }
-
-                            pile.Clear();
-                            playerTwo = !playerTwo;
+                            foreach (var p in pile)
+                                playerOneCards.Enqueue(p);
                         }
-                        continue;
+                        else
+                        {
+                            foreach (var p in pile)
+                                playerTwoCards.Enqueue(p);
+                        }
+
+                        pile.Clear();
+                        playerTwo = !playerTwo;
                     }
+                    continue;
                 }
-
-                penalty = CalculatePenalty(card, penalty);
-
-                playerTwo = !playerTwo;
             }
 
-            if (pile.Count > 0)
-            {
-                tricks++;
-            }
+            penalty = CalculatePenalty(card, penalty);
 
-            var dealStatistics = new DealStatistics
-            {
-                Cards = cards,
-                Tricks = tricks,
-                PlayerOneOutcome = playerOneCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
-                PlayerTwoOutcome = playerTwoCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
-            };
+            playerTwo = !playerTwo;
+        }
 
-            return dealStatistics;
-        });
+        if (pile.Count > 0)
+        {
+            tricks++;
+        }
+
+        var dealStatistics = new DealStatistics
+        {
+            Cards = cards,
+            Tricks = tricks,
+            PlayerOneOutcome = playerOneCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
+            PlayerTwoOutcome = playerTwoCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
+        };
+
+        return dealStatistics;
+
     }
 
     private static int CalculatePenalty(Card card, int penalty)

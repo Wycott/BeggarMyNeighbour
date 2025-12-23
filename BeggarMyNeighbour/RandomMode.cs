@@ -7,7 +7,7 @@ namespace BeggarMyNeighbour;
 internal partial class Program
 {
     private static long bestRate = 0;
-    private static async Task RandomMode()
+    private static void RandomMode()
     {
         var sw = new Stopwatch();
         sw.Start();
@@ -22,7 +22,7 @@ internal partial class Program
         while (true)
         {
             iterations++;
-            var dealResult = await RandomPlay();
+            var dealResult = RandomPlay();
 
             var newBest = false;
 
@@ -94,10 +94,10 @@ internal partial class Program
             resultLine8);
     }
 
-    private static async Task<DealResult> RandomPlay()
+    private static DealResult RandomPlay()
     {
-        var deal = await Deck.GenerateStacks();
+        var deal = Deck.GenerateStacks();
 
-        return await Engine.RunScenario(deal.PlayerOneDeal, deal.PlayerTwoDeal);
+        return Engine.RunScenario(deal.PlayerOneDeal, deal.PlayerTwoDeal);
     }
 }
