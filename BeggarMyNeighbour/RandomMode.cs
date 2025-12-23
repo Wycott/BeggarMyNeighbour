@@ -7,6 +7,15 @@ namespace BeggarMyNeighbour;
 internal partial class Program
 {
     private static long bestRate = 0;
+
+    private static readonly Dictionary<string, string> ReleaseNotes = new()
+    {
+        {"Damp squib", "14 November 2025 - Initial cut"},
+        {"Night goose", "23 December 2025 - i) Change Iters calculation to long as it overran"},
+        {"Half bee", "23 December 2025 - ii) Antigravity tuning"},
+        {"Wooden sloggie", "23 December 2025 - iii) More antigravity tuning"},
+    };
+
     private static void RandomMode()
     {
         var sw = new Stopwatch();
@@ -48,15 +57,7 @@ internal partial class Program
 
     private static void OutputBestResultSoFar(DealResult dealResult, long iterations, string fileNameStub, ref int record, Stopwatch sw)
     {
-        // TODO: Change this every time a new image is built so we can track different versions
-        var releaseNotes = new Dictionary<string, string>
-        {
-            {"Damp squib", "14 November 2025 - Initial cut"},
-            {"Night goose", "23 December 2025 - i) Change Iters calculation to long as it overran"},
-            {"Half bee", "23 December 2025 - ii) Antigravity tuning"},
-        };
-
-        var releaseCodeName = releaseNotes.Keys.Last();
+        var releaseCodeName = ReleaseNotes.Keys.Last();
 
         record++;
 
@@ -64,10 +65,12 @@ internal partial class Program
         var maxDecks = dealResult.Cards / 52;
         var secs = Math.Max(sw.ElapsedMilliseconds / 1000, 1);
         var rate = iterations / secs;
+
         if (rate > bestRate)
         {
             bestRate = rate;
         }
+
         var resultLine0 = sw.ElapsedMilliseconds >= 60000
             ? $"Runtime {sw.ElapsedMilliseconds / 60000:N0} mins"
             : $"Runtime {secs} secs";

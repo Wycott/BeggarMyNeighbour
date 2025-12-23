@@ -8,10 +8,6 @@ public static class Engine
 
     public static DealResult RunScenario(string playerOneCardString, string playerTwoCardString)
     {
-        //var playerOneCards = playerOneCardString.Select(c => new Card(c)).ToList();
-
-        //var playerTwoCards = playerTwoCardString.Select(c => new Card(c)).ToList();
-
         var playerOneCards = new Queue<Card>(
             playerOneCardString.Select(c => new Card(c))
         );

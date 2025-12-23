@@ -13,32 +13,30 @@ public static class Deck
 
     public static Deal CreateDealFromDeck(List<Card> deckOfCards)
     {
-
-        var playerOneCards = deckOfCards.OrderBy(x => Guid.NewGuid()).Take(26).ToList();
-        var playerTwoCards = deckOfCards.OrderBy(x => Guid.NewGuid()).Skip(26).Take(26).ToList();
-
-        var playerOneDealBag = new ConcurrentBag<string>();
-        var playerTwoDealBag = new ConcurrentBag<string>();
-
-        Parallel.ForEach(playerOneCards, c =>
+        // Fisher-Yates shuffle
+        var n = deckOfCards.Count;
+        while (n > 1)
         {
-            playerOneDealBag.Add(c.SimpleRank.ToString());
-        });
+            n--;
+            var k = Random.Shared.Next(n + 1);
+            (deckOfCards[k], deckOfCards[n]) = (deckOfCards[n], deckOfCards[k]);
+        }
 
-        Parallel.ForEach(playerTwoCards, c =>
-        {
-            playerTwoDealBag.Add(c.SimpleRank.ToString());
-        });
+        var playerOneCards = deckOfCards.Take(26).ToList();
+        var playerTwoCards = deckOfCards.Skip(26).Take(26).ToList();
 
-        var playerOneDeal = string.Join("", playerOneDealBag);
-        var playerTwoDeal = string.Join("", playerTwoDealBag);
+        var sb1 = new System.Text.StringBuilder(26);
+        foreach (var c in playerOneCards) sb1.Append(c.SimpleRank);
+
+        var sb2 = new System.Text.StringBuilder(26);
+        foreach (var c in playerTwoCards) sb2.Append(c.SimpleRank);
 
         return new Deal
         {
             PlayerOneCards = playerOneCards,
             PlayerTwoCards = playerTwoCards,
-            PlayerOneDeal = playerOneDeal,
-            PlayerTwoDeal = playerTwoDeal
+            PlayerOneDeal = sb1.ToString(),
+            PlayerTwoDeal = sb2.ToString()
         };
     }
 
