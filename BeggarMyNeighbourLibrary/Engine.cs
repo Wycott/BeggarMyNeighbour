@@ -70,16 +70,19 @@ public static class Engine
                     {
                         tricks++;
 
-
                         if (playerTwo)
                         {
                             foreach (var p in pile)
+                            {
                                 playerOneCards.Enqueue(p);
+                            }
                         }
                         else
                         {
                             foreach (var p in pile)
+                            {
                                 playerTwoCards.Enqueue(p);
+                            }
                         }
 
                         pile.Clear();
@@ -108,7 +111,6 @@ public static class Engine
         };
 
         return dealStatistics;
-
     }
 
     private static int CalculatePenalty(Card card, int penalty)

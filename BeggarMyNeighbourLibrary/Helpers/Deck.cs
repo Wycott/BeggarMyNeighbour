@@ -68,6 +68,5 @@ public static class Deck
         }
 
         return retVal;
-
     }
 }
