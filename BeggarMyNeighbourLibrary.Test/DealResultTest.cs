@@ -1,5 +1,9 @@
-﻿namespace BeggarMyNeighbourLibrary.Test;
+﻿using AiAnnotations;
+using AiAnnotations.Types;
 
+namespace BeggarMyNeighbourLibrary.Test;
+
+[AiGenerated(Authorship.Hybrid)]
 public class DealResultTest
 {
     [Fact]
@@ -35,5 +39,32 @@ public class DealResultTest
         Assert.Equal(PlayerTwoOutcome, dealResult.PlayerTwoOutcome);
         Assert.Equal(PlayerOneSuits, dealResult.PlayerOneSuits);
         Assert.Equal(PlayerTwoSuits, dealResult.PlayerTwoSuits);
+    }
+
+    [Fact]
+    public void PlayerOneSuits_AllNonSuits_Returns0()
+    {
+        var dealResult = new DealResult { PlayerOneDeal = "--------------------------" };
+        Assert.Equal(0, dealResult.PlayerOneSuits);
+    }
+
+    [Fact]
+    public void PlayerTwoSuits_AllNonSuits_Returns0()
+    {
+        var dealResult = new DealResult { PlayerTwoDeal = "--------------------------" };
+        Assert.Equal(0, dealResult.PlayerTwoSuits);
+    }
+
+    [Fact]
+    public void PlayerSuits_AllSuits_Returns26()
+    {
+        var dealResult = new DealResult 
+        { 
+            PlayerOneDeal = "AAAAKKKKQQQQJJAAAAKKKKQQ",
+            PlayerTwoDeal = "AAAAKKKKQQQQJJAAAAKKKKQQ"
+        };
+        
+        Assert.Equal(26, dealResult.PlayerOneSuits);
+        Assert.Equal(26, dealResult.PlayerTwoSuits);
     }
 }
