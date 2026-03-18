@@ -14,6 +14,7 @@ internal partial class Program
         {"Night goose", "23 December 2025 - i) Change Iters calculation to long as it overran"},
         {"Half bee", "23 December 2025 - ii) Antigravity tuning"},
         {"Wooden sloggie", "23 December 2025 - iii) More antigravity tuning"},
+        {"Doggie daddie", "18 March 2026 - force new version for image id comparisons"}
     };
 
     private static void RandomMode()
