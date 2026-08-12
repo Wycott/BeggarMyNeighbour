@@ -21,7 +21,7 @@ public class DealResultTest
         const string PlayerOneOutcome = "Win";
         const string PlayerTwoOutcome = "Lose";
 
-        var dealResult = new DealResult()
+        var dealResult = new DealResult
         {
             PlayerOneDeal = PlayerOneDeal,
             PlayerTwoDeal = PlayerTwoDeal,

@@ -107,7 +107,7 @@ public static class Engine
             Cards = cards,
             Tricks = tricks,
             PlayerOneOutcome = playerOneCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
-            PlayerTwoOutcome = playerTwoCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose",
+            PlayerTwoOutcome = playerTwoCards.Count + pile.Count == FullDeckSize ? "Win" : "Lose"
         };
 
         return dealStatistics;

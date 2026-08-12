@@ -1,5 +1,4 @@
 using AiAnnotations;
-using AiAnnotations.Types;
 
 namespace BeggarMyNeighbourLibrary.Test;
 

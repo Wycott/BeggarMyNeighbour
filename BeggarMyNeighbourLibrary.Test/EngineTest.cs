@@ -78,8 +78,8 @@ public class EngineTest
     [Fact]
     public void RunScenario_WithQueues_ReturnsStatistics()
     {
-        var p1 = new Queue<Card>(new[] { new Card('A'), new Card('-') });
-        var p2 = new Queue<Card>(new[] { new Card('-'), new Card('-') });
+        var p1 = new Queue<Card>([new Card('A'), new Card('-')]);
+        var p2 = new Queue<Card>([new Card('-'), new Card('-')]);
 
         var res = Engine.RunScenario(p1, p2);
 

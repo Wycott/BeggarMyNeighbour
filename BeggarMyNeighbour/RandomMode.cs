@@ -14,7 +14,8 @@ internal partial class Program
         {"Night goose", "23 December 2025 - i) Change Iters calculation to long as it overran"},
         {"Half bee", "23 December 2025 - ii) Antigravity tuning"},
         {"Wooden sloggie", "23 December 2025 - iii) More antigravity tuning"},
-        {"Doggie daddie", "18 March 2026 - force new version for image id comparisons"}
+        {"Doggie daddie", "18 March 2026 - force new version for image id comparisons"},
+        {"Dustbin dad", "28 August 2026 - ReSharper mods and workflow fix"}
     };
 
     private static void RandomMode()
