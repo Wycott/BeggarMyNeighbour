@@ -28,10 +28,8 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
-      - name: Restore
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
       - name: Build
-        run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore --configuration Release
+        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release
 
   test:
     runs-on: ubuntu-latest
@@ -41,8 +39,6 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
-      - name: Restore
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
       # IMPORTANT: Do NOT test via the .slnx file.
       # Let dotnet auto-discover test projects to avoid VSTest .slnx bug.
       - name: Test
