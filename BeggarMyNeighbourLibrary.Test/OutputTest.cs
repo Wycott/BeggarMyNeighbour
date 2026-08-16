@@ -41,6 +41,7 @@ public class OutputTest
             Output.WriteResults(filenameStub, "Second");
 
             var content = File.ReadAllText(fullFileName);
+
             Assert.Contains("First", content);
             Assert.Contains("Second", content);
         }
