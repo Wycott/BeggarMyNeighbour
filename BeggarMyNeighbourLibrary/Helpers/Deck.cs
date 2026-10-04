@@ -6,7 +6,14 @@ public static class Deck
     {
         var deckOfCards = Generate();
 
-        return CreateDealFromDeck(deckOfCards);
+        var deck = CreateDealFromDeck(deckOfCards);
+
+        while (!deck.GoodCandidate)
+        {
+            deck = CreateDealFromDeck(Generate());
+        }
+
+        return deck;
     }
 
     public static Deal CreateDealFromDeck(List<Card> deckOfCards)
@@ -29,13 +36,15 @@ public static class Deck
         var sb2 = new System.Text.StringBuilder(26);
         foreach (var c in playerTwoCards) sb2.Append(c.SimpleRank);
 
-        return new Deal
+        var nd = new Deal
         {
             PlayerOneCards = playerOneCards,
             PlayerTwoCards = playerTwoCards,
             PlayerOneDeal = sb1.ToString(),
             PlayerTwoDeal = sb2.ToString()
         };
+
+        return nd;
     }
 
     public static List<Card> Generate()
