@@ -10,13 +10,14 @@ internal partial class Program
 
     private static readonly Dictionary<string, string> ReleaseNotes = new()
     {
-        {"Damp squib", "14 November 2025 - Initial cut"},
-        {"Night goose", "23 December 2025 - i) Change Iters calculation to long as it overran"},
-        {"Half bee", "23 December 2025 - ii) Antigravity tuning"},
-        {"Wooden sloggie", "23 December 2025 - iii) More antigravity tuning"},
-        {"Doggie daddie", "18 March 2026 - force new version for image id comparisons"},
-        {"Dustbin dad", "28 August 2026 - ReSharper mods and workflow fix"},
-        {"Bulk buy Bob", "4 October 2026 - Ditch known bad deals early"}
+        {"Apple", "14 November 2025 - Initial cut"},
+        {"Banana", "23 December 2025 - i) Change Iters calculation to long as it overran"},
+        {"Cherry", "23 December 2025 - ii) Antigravity tuning"},
+        {"Date", "23 December 2025 - iii) More antigravity tuning"},
+        {"Elderflower", "18 March 2026 - force new version for image id comparisons"},
+        {"Fig", "28 August 2026 - ReSharper mods and workflow fix"},
+        {"Gooseberry", "4 October 2026 - Ditch known bad deals early"},
+        {"Hazelnut", "5 October 2026 - Show better units for run time"},
     };
 
     private static void RandomMode()
@@ -74,9 +75,7 @@ internal partial class Program
             bestRate = rate;
         }
 
-        var resultLine0 = sw.ElapsedMilliseconds >= 60000
-            ? $"Runtime {sw.ElapsedMilliseconds / 60000:N0} mins"
-            : $"Runtime {secs} secs";
+        var resultLine0 = RuntimeFormatter.Format(sw.ElapsedMilliseconds);
         var resultLine1 = $"{record}) {DateTime.Now}";
         var resultLine2 = $"Iters {iterations:N0} ({rate:N0}/s)";
         var resultLine2B = $"Best rate {bestRate:N0}";
