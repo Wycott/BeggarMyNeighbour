@@ -3,6 +3,13 @@
     ViewData["Title"] = "Simulators";
 }
 
+<style>
+    /* When the dashboard is in "latest only" mode, hide every result row except the newest. */
+    #simulatorTabsContent.latest-only .result-not-latest {
+        display: none;
+    }
+</style>
+
 <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
     <div>
         <h1 class="h3 mb-1">Simulators</h1>
@@ -20,13 +27,10 @@
 
     <div class="btn-toolbar gap-2" role="toolbar" aria-label="Dashboard controls">
         <div class="btn-group" role="group" aria-label="Result display mode">
-            <a class="btn btn-sm @(Model.LatestOnly ? "btn-outline-primary" : "btn-primary")"
-               asp-action="Index" asp-route-latestOnly="false">All results</a>
-            <a class="btn btn-sm @(Model.LatestOnly ? "btn-primary" : "btn-outline-primary")"
-               asp-action="Index" asp-route-latestOnly="true">Latest only</a>
+            <button type="button" id="showAll" class="btn btn-sm btn-primary active">All results</button>
+            <button type="button" id="showLatest" class="btn btn-sm btn-outline-primary">Latest only</button>
         </div>
-        <a class="btn btn-sm btn-outline-secondary"
-           asp-action="Index" asp-route-latestOnly="@Model.LatestOnly" title="Reload latest data">
+        <a class="btn btn-sm btn-outline-secondary" asp-action="Index" title="Reload latest data from the simulators">
             Refresh
         </a>
     </div>
@@ -67,7 +71,7 @@ else
         }
     </ul>
 
-    <div class="tab-content border border-top-0 rounded-bottom p-3" id="simulatorTabsContent">
+    <div class="tab-content border border-top-0 rounded-bottom p-3" id="simulatorTabsContent" data-dashboard-content>
         @for (var i = 0; i < Model.Simulators.Count; i++)
         {
             var sim = Model.Simulators[i];
@@ -83,4 +87,35 @@ else
             </div>
         }
     </div>
+}
+
+@section Scripts {
+    <script>
+        // "Latest only" vs "All results" is a pure view toggle - it hides/shows already-loaded
+        // rows and never contacts the server. Only "Refresh" fetches fresh data.
+        (function () {
+            const content = document.getElementById('simulatorTabsContent');
+            const showAll = document.getElementById('showAll');
+            const showLatest = document.getElementById('showLatest');
+
+            if (!content || !showAll || !showLatest) {
+                return;
+            }
+
+            function setMode(latestOnly) {
+                content.classList.toggle('latest-only', latestOnly);
+
+                showLatest.classList.toggle('btn-primary', latestOnly);
+                showLatest.classList.toggle('btn-outline-primary', !latestOnly);
+                showLatest.classList.toggle('active', latestOnly);
+
+                showAll.classList.toggle('btn-primary', !latestOnly);
+                showAll.classList.toggle('btn-outline-primary', latestOnly);
+                showAll.classList.toggle('active', !latestOnly);
+            }
+
+            showAll.addEventListener('click', () => setMode(false));
+            showLatest.addEventListener('click', () => setMode(true));
+        })();
+    </script>
 }

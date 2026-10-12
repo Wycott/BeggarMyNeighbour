@@ -19,7 +19,8 @@ public class HomeController : Controller
     }
 
     // The latest data is pulled from the simulators each time the dashboard is loaded or refreshed.
-    public async Task<IActionResult> Index(bool latestOnly = false, CancellationToken cancellationToken = default)
+    // The "latest only" toggle is handled client-side and does not reload the page.
+    public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
     {
         var asOfUtc = DateTime.UtcNow;
 
@@ -29,12 +30,11 @@ public class HomeController : Controller
 
         var model = new DashboardViewModel
         {
-            LatestOnly = latestOnly,
             AsOfUtc = asOfUtc,
             ConnectedSimulatorCount = discovered.Count,
             Simulators = simulators
                 .OrderBy(s => s.StartedUtc)
-                .Select(s => new SimulatorViewModel(s, latestOnly, asOfUtc))
+                .Select(s => new SimulatorViewModel(s, asOfUtc))
                 .ToList(),
         };
 

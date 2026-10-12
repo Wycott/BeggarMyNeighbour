@@ -26,8 +26,8 @@ public class SimulatorViewModel
     public bool HasResults => Results.Count > 0;
 
     /// <summary>
-    /// Results to display, already ordered newest-first and reduced to the latest only when the
-    /// dashboard is in "latest only" mode.
+    /// All results, ordered newest-first. The "latest only" view is applied client-side (it hides
+    /// all but the first row), so the full set is always rendered.
     /// </summary>
     public IReadOnlyList<SimulatorResult> Results { get; }
 
@@ -37,7 +37,7 @@ public class SimulatorViewModel
     /// <summary>A short, tab-friendly label derived from the simulator id.</summary>
     public string ShortId => Id.ToString()[..8];
 
-    public SimulatorViewModel(Simulator simulator, bool latestOnly, DateTime asOfUtc)
+    public SimulatorViewModel(Simulator simulator, DateTime asOfUtc)
     {
         ArgumentNullException.ThrowIfNull(simulator);
 
@@ -55,9 +55,7 @@ public class SimulatorViewModel
             TimeSinceLastOutput = Max(asOfUtc - ordered[0].RecordedUtc, TimeSpan.Zero);
         }
 
-        Results = latestOnly
-            ? ordered.Take(1).ToList()
-            : ordered;
+        Results = ordered;
     }
 
     private static TimeSpan Max(TimeSpan a, TimeSpan b)

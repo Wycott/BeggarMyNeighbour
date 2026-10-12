@@ -53,9 +53,12 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var result in Model.Results)
+                @for (var i = 0; i < Model.Results.Count; i++)
                 {
-                    <tr>
+                    var result = Model.Results[i];
+                    // The first row is the newest result. All others are hidden in "latest only" mode.
+                    var rowClass = i == 0 ? "result-row result-latest" : "result-row result-not-latest";
+                    <tr class="@rowClass">
                         <td class="text-end">@result.Record.ToString("N0")</td>
                         <td>@result.RecordedUtc.ToString("u")</td>
                         <td>@DurationDisplay.Humanize(TimeSpan.FromMilliseconds(result.RuntimeMilliseconds))</td>
@@ -67,7 +70,7 @@ else
                         <td class="text-end">@result.Tricks.ToString("N0")</td>
                         <td>@result.ReleaseCodeName</td>
                     </tr>
-                    <tr class="table-light">
+                    <tr class="table-light @rowClass">
                         <td></td>
                         <td colspan="9">
                             <div class="font-monospace small">
