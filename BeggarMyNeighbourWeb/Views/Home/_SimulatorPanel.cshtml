@@ -1,0 +1,83 @@
+@model SimulatorViewModel
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-lg-6">
+        <dl class="row mb-0 small">
+            <dt class="col-sm-4 text-muted">Simulator</dt>
+            <dd class="col-sm-8 font-monospace">@Model.Id</dd>
+
+            <dt class="col-sm-4 text-muted">Started (UTC)</dt>
+            <dd class="col-sm-8">@Model.StartedUtc.ToString("u")</dd>
+        </dl>
+    </div>
+    <div class="col-12 col-lg-6">
+        <div class="row text-center">
+            <div class="col">
+                <div class="text-muted small text-uppercase">Running for</div>
+                <div class="fs-5 fw-semibold">@DurationDisplay.Humanize(Model.Uptime)</div>
+            </div>
+            <div class="col">
+                <div class="text-muted small text-uppercase">Since last output</div>
+                <div class="fs-5 fw-semibold">@DurationDisplay.Humanize(Model.TimeSinceLastOutput)</div>
+            </div>
+            <div class="col">
+                <div class="text-muted small text-uppercase">Results</div>
+                <div class="fs-5 fw-semibold">@(Model.Latest?.Record.ToString("N0") ?? "0")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.HasResults)
+{
+    <div class="alert alert-secondary mb-0" role="alert">
+        This simulator has not produced any results yet.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-sm table-striped align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-end">#</th>
+                    <th scope="col">Recorded (UTC)</th>
+                    <th scope="col">Runtime</th>
+                    <th scope="col" class="text-end">Iterations</th>
+                    <th scope="col" class="text-end">Rate /s</th>
+                    <th scope="col" class="text-end">Best /s</th>
+                    <th scope="col" class="text-end">Cards</th>
+                    <th scope="col" class="text-end">Decks</th>
+                    <th scope="col" class="text-end">Tricks</th>
+                    <th scope="col">Release</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model.Results)
+                {
+                    <tr>
+                        <td class="text-end">@result.Record.ToString("N0")</td>
+                        <td>@result.RecordedUtc.ToString("u")</td>
+                        <td>@DurationDisplay.Humanize(TimeSpan.FromMilliseconds(result.RuntimeMilliseconds))</td>
+                        <td class="text-end">@result.Iterations.ToString("N0")</td>
+                        <td class="text-end">@result.Rate.ToString("N0")</td>
+                        <td class="text-end">@result.BestRate.ToString("N0")</td>
+                        <td class="text-end">@result.Cards.ToString("N0")</td>
+                        <td class="text-end">@result.Decks.ToString("N0")</td>
+                        <td class="text-end">@result.Tricks.ToString("N0")</td>
+                        <td>@result.ReleaseCodeName</td>
+                    </tr>
+                    <tr class="table-light">
+                        <td></td>
+                        <td colspan="9">
+                            <div class="font-monospace small">
+                                <div>P1 <span class="text-muted">(@result.PlayerOneSuits court cards, @result.PlayerOneOutcome)</span>: @result.PlayerOneDeal</div>
+                                <div>P2 <span class="text-muted">(@result.PlayerTwoSuits court cards, @result.PlayerTwoOutcome)</span>: @result.PlayerTwoDeal</div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

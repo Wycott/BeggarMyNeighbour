@@ -1,7 +1,48 @@
 services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # MQTT over WebSockets (handy for browser-based debugging tools)
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+
   beggarmyneighbour:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: beggarmyneighbour
     restart: unless-stopped
+    # No container_name: this service is scalable (multiple simulator instances).
+    # The number of instances defaults to 2 and can be overridden with the SIM_COUNT
+    # environment variable (see .env) or `docker compose up --scale beggarmyneighbour=N`.
+    deploy:
+      replicas: ${SIM_COUNT:-2}
+    depends_on:
+      - mosquitto
+    environment:
+      # Broker reachable by the service name on the compose network.
+      - Mqtt__Host=mosquitto
+      - Mqtt__Port=1883
+
+  beggarmyneighbourweb:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: beggarmyneighbourweb
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    ports:
+      # Host 8080 -> container 8080 (ASPNETCORE_URLS). Browse http://localhost:8080
+      - "8080:8080"
+    environment:
+      - Mqtt__Host=mosquitto
+      - Mqtt__Port=1883
+
+volumes:
+  mosquitto-data:
+  mosquitto-log:

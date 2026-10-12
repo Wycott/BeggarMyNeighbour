@@ -18,9 +18,10 @@ internal partial class Program
         {"Fig", "28 August 2026 - ReSharper mods and workflow fix"},
         {"Gooseberry", "4 October 2026 - Ditch known bad deals early"},
         {"Hazelnut", "5 October 2026 - Show better units for run time"},
+        {"Kiwi", "12 October 2026 - Store output in model, have per instance GUID, web application, messaging"}
     };
 
-    private static void RandomMode()
+    private static void RandomMode(Simulator simulator)
     {
         var sw = new Stopwatch();
         sw.Start();
@@ -30,7 +31,9 @@ internal partial class Program
         var iterations = 0L;
         var record = 0;
 
-        var fileNameStub = Guid.NewGuid().ToString();
+        var fileNameStub = simulator.Id.ToString();
+
+        Console.WriteLine($"Simulator {simulator.Id} started at {simulator.StartedUtc:u}");
 
         while (true)
         {
@@ -53,13 +56,13 @@ internal partial class Program
 
             if (newBest)
             {
-                OutputBestResultSoFar(dealResult, iterations, fileNameStub, ref record, sw);
+                OutputBestResultSoFar(dealResult, iterations, fileNameStub, ref record, sw, simulator);
             }
         }
         // ReSharper disable once FunctionNeverReturns
     }
 
-    private static void OutputBestResultSoFar(DealResult dealResult, long iterations, string fileNameStub, ref int record, Stopwatch sw)
+    private static void OutputBestResultSoFar(DealResult dealResult, long iterations, string fileNameStub, ref int record, Stopwatch sw, Simulator simulator)
     {
         var releaseCodeName = ReleaseNotes.Keys.Last();
 
@@ -74,6 +77,26 @@ internal partial class Program
         {
             bestRate = rate;
         }
+
+        simulator.AddResult(new SimulatorResult
+        {
+            Record = record,
+            RecordedUtc = DateTime.UtcNow,
+            RuntimeMilliseconds = sw.ElapsedMilliseconds,
+            Iterations = iterations,
+            Rate = rate,
+            BestRate = bestRate,
+            Cards = maxCards,
+            Decks = maxDecks,
+            Tricks = dealResult.Tricks,
+            PlayerOneDeal = dealResult.PlayerOneDeal,
+            PlayerTwoDeal = dealResult.PlayerTwoDeal,
+            PlayerOneSuits = dealResult.PlayerOneSuits,
+            PlayerTwoSuits = dealResult.PlayerTwoSuits,
+            PlayerOneOutcome = dealResult.PlayerOneOutcome,
+            PlayerTwoOutcome = dealResult.PlayerTwoOutcome,
+            ReleaseCodeName = releaseCodeName,
+        });
 
         var resultLine0 = RuntimeFormatter.Format(sw.ElapsedMilliseconds);
         var resultLine1 = $"{record}) {DateTime.Now}";

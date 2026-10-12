@@ -1,0 +1,86 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Simulators";
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="h3 mb-1">Simulators</h1>
+        <div class="text-muted small">
+            Showing data as of @Model.AsOfUtc.ToString("u")
+            · @Model.Simulators.Count simulator@(Model.Simulators.Count == 1 ? "" : "s") with results
+        </div>
+        <div class="mt-1">
+            <span class="badge rounded-pill @(Model.ConnectedSimulatorCount > 0 ? "text-bg-success" : "text-bg-secondary")">
+                @Model.ConnectedSimulatorCount connected
+            </span>
+            <span class="text-muted small ms-1">(responded to discovery poll)</span>
+        </div>
+    </div>
+
+    <div class="btn-toolbar gap-2" role="toolbar" aria-label="Dashboard controls">
+        <div class="btn-group" role="group" aria-label="Result display mode">
+            <a class="btn btn-sm @(Model.LatestOnly ? "btn-outline-primary" : "btn-primary")"
+               asp-action="Index" asp-route-latestOnly="false">All results</a>
+            <a class="btn btn-sm @(Model.LatestOnly ? "btn-primary" : "btn-outline-primary")"
+               asp-action="Index" asp-route-latestOnly="true">Latest only</a>
+        </div>
+        <a class="btn btn-sm btn-outline-secondary"
+           asp-action="Index" asp-route-latestOnly="@Model.LatestOnly" title="Reload latest data">
+            Refresh
+        </a>
+    </div>
+</div>
+
+@if (Model.IsEmpty)
+{
+    <div class="alert alert-info" role="alert">
+        No simulators are reporting yet.
+    </div>
+}
+else
+{
+    <ul class="nav nav-tabs" id="simulatorTabs" role="tablist">
+        @for (var i = 0; i < Model.Simulators.Count; i++)
+        {
+            var sim = Model.Simulators[i];
+            var tabId = $"sim-{sim.Id:N}";
+            var isActive = i == 0;
+            var isStale = sim.TimeSinceLastOutput.HasValue && sim.TimeSinceLastOutput.Value > TimeSpan.FromMinutes(15);
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link @(isActive ? "active" : "")"
+                        id="@(tabId)-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#@tabId"
+                        type="button"
+                        role="tab"
+                        aria-controls="@tabId"
+                        aria-selected="@(isActive ? "true" : "false")">
+                    <span class="font-monospace">@sim.ShortId</span>
+                    @if (isStale)
+                    {
+                        <span class="badge text-bg-warning ms-1" title="No new output for over 15 minutes">stale</span>
+                    }
+                </button>
+            </li>
+        }
+    </ul>
+
+    <div class="tab-content border border-top-0 rounded-bottom p-3" id="simulatorTabsContent">
+        @for (var i = 0; i < Model.Simulators.Count; i++)
+        {
+            var sim = Model.Simulators[i];
+            var tabId = $"sim-{sim.Id:N}";
+            var isActive = i == 0;
+
+            <div class="tab-pane fade @(isActive ? "show active" : "")"
+                 id="@tabId"
+                 role="tabpanel"
+                 aria-labelledby="@(tabId)-tab"
+                 tabindex="0">
+                <partial name="_SimulatorPanel" model="sim" />
+            </div>
+        }
+    </div>
+}
