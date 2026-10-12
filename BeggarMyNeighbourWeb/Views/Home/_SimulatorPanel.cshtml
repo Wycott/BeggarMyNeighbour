@@ -17,8 +17,18 @@
                 <div class="fs-5 fw-semibold">@DurationDisplay.Humanize(Model.Uptime)</div>
             </div>
             <div class="col">
+                <div class="text-muted small text-uppercase">Output frequency</div>
+                <div class="fs-5 fw-semibold">@DurationDisplay.Humanize(Model.OutputFrequency)</div>
+            </div>
+            <div class="col">
                 <div class="text-muted small text-uppercase">Since last output</div>
-                <div class="fs-5 fw-semibold">@DurationDisplay.Humanize(Model.TimeSinceLastOutput)</div>
+                <div class="fs-5 fw-semibold @(Model.IsStale ? "text-warning" : "")">
+                    @DurationDisplay.Humanize(Model.TimeSinceLastOutput)
+                    @if (Model.IsStale)
+                    {
+                        <span class="badge text-bg-warning align-middle">stale</span>
+                    }
+                </div>
             </div>
             <div class="col">
                 <div class="text-muted small text-uppercase">Results</div>

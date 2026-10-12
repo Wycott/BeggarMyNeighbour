@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using BeggarMyNeighbourWeb.Models;
 using BeggarMyNeighbourWeb.Services;
 
@@ -9,13 +10,16 @@ public class HomeController : Controller
 {
     private readonly ISimulatorResultsProvider _resultsProvider;
     private readonly ISimulatorDiscoveryProvider _discoveryProvider;
+    private readonly DashboardSettings _dashboardSettings;
 
     public HomeController(
         ISimulatorResultsProvider resultsProvider,
-        ISimulatorDiscoveryProvider discoveryProvider)
+        ISimulatorDiscoveryProvider discoveryProvider,
+        IOptions<DashboardSettings> dashboardSettings)
     {
         _resultsProvider = resultsProvider;
         _discoveryProvider = discoveryProvider;
+        _dashboardSettings = dashboardSettings.Value;
     }
 
     // The latest data is pulled from the simulators each time the dashboard is loaded or refreshed.
@@ -34,7 +38,7 @@ public class HomeController : Controller
             ConnectedSimulatorCount = discovered.Count,
             Simulators = simulators
                 .OrderBy(s => s.StartedUtc)
-                .Select(s => new SimulatorViewModel(s, asOfUtc))
+                .Select(s => new SimulatorViewModel(s, asOfUtc, _dashboardSettings.StaleMultiplier))
                 .ToList(),
         };
 

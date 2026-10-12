@@ -12,6 +12,7 @@ builder.Services.AddSingleton<ISimulatorResultsProvider, MqttSimulatorResultsPro
 // Broker + discovery configuration, bound from appsettings.json (and environment overrides).
 builder.Services.Configure<MqttSettings>(builder.Configuration.GetSection(MqttSettings.SectionName));
 builder.Services.Configure<DiscoverySettings>(builder.Configuration.GetSection(DiscoverySettings.SectionName));
+builder.Services.Configure<DashboardSettings>(builder.Configuration.GetSection(DashboardSettings.SectionName));
 
 // Discovers connected simulators over MQTT by polling them on each dashboard load.
 builder.Services.AddSingleton<ISimulatorDiscoveryProvider, MqttSimulatorDiscoveryProvider>();

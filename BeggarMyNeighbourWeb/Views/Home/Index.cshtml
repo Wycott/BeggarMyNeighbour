@@ -50,7 +50,6 @@ else
             var sim = Model.Simulators[i];
             var tabId = $"sim-{sim.Id:N}";
             var isActive = i == 0;
-            var isStale = sim.TimeSinceLastOutput.HasValue && sim.TimeSinceLastOutput.Value > TimeSpan.FromMinutes(15);
 
             <li class="nav-item" role="presentation">
                 <button class="nav-link @(isActive ? "active" : "")"
@@ -62,9 +61,9 @@ else
                         aria-controls="@tabId"
                         aria-selected="@(isActive ? "true" : "false")">
                     <span class="font-monospace">@sim.ShortId</span>
-                    @if (isStale)
+                    @if (sim.IsStale)
                     {
-                        <span class="badge text-bg-warning ms-1" title="No new output for over 15 minutes">stale</span>
+                        <span class="badge text-bg-warning ms-1" title="No new output for noticeably longer than this simulator's normal output frequency">stale</span>
                     }
                 </button>
             </li>
