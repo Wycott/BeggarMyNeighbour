@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Docker image exports produced by build-prod.bat (deployment artifacts, not source)
+*.tar

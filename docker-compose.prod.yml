@@ -1,0 +1,43 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # MQTT over WebSockets
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+
+  beggarmyneighbour:
+    # Production uses the image loaded from beggarmyneighbour-sim.tar (no build on the NAS).
+    image: beggarmyneighbour-beggarmyneighbour:latest
+    restart: unless-stopped
+    # Scalable: number of simulator instances defaults to 2, override with SIM_COUNT.
+    deploy:
+      replicas: ${SIM_COUNT:-2}
+    depends_on:
+      - mosquitto
+    environment:
+      - Mqtt__Host=mosquitto
+      - Mqtt__Port=1883
+
+  beggarmyneighbourweb:
+    # Production uses the image loaded from beggarmyneighbour-web.tar (no build on the NAS).
+    image: beggarmyneighbour-beggarmyneighbourweb:latest
+    container_name: beggarmyneighbourweb
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    ports:
+      # Host 5300 -> container 8080. Browse http://<nas-host>:5300
+      - "5300:8080"
+    environment:
+      - Mqtt__Host=mosquitto
+      - Mqtt__Port=1883
+
+volumes:
+  mosquitto-data:
+  mosquitto-log:

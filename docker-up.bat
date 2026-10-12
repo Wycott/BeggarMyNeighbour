@@ -34,7 +34,7 @@ if errorlevel 1 (
 )
 
 echo.
-echo Stack started. Web app: http://localhost:8080
+echo Stack started. Web app: http://localhost:5300
 echo Current status:
 docker compose ps
 

@@ -1,0 +1,5 @@
+# Keep Linux shell scripts and configs as LF so they run on the Synology NAS,
+# regardless of the committer's platform or core.autocrlf setting.
+*.sh text eol=lf
+mosquitto.conf text eol=lf
+*.conf text eol=lf
