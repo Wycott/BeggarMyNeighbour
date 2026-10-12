@@ -8,19 +8,6 @@ internal partial class Program
 {
     private static long bestRate;
 
-    private static readonly Dictionary<string, string> ReleaseNotes = new()
-    {
-        {"Apple", "14 November 2025 - Initial cut"},
-        {"Banana", "23 December 2025 - i) Change Iters calculation to long as it overran"},
-        {"Cherry", "23 December 2025 - ii) Antigravity tuning"},
-        {"Date", "23 December 2025 - iii) More antigravity tuning"},
-        {"Elderflower", "18 March 2026 - force new version for image id comparisons"},
-        {"Fig", "28 August 2026 - ReSharper mods and workflow fix"},
-        {"Gooseberry", "4 October 2026 - Ditch known bad deals early"},
-        {"Hazelnut", "5 October 2026 - Show better units for run time"},
-        {"Kiwi-beta", "12 October 2026 - Store output in model, have per instance GUID, web application, messaging"}
-    };
-
     private static void RandomMode(Simulator simulator)
     {
         var sw = new Stopwatch();
@@ -38,6 +25,7 @@ internal partial class Program
         while (true)
         {
             iterations++;
+
             var dealResult = RandomPlay();
 
             var newBest = false;
@@ -64,10 +52,9 @@ internal partial class Program
 
     private static void OutputBestResultSoFar(DealResult dealResult, long iterations, string fileNameStub, ref int record, Stopwatch sw, Simulator simulator)
     {
-        var releaseCodeName = ReleaseNotes.Keys.Last();
-
         record++;
 
+        var releaseCodeName = ReleaseNotes.Keys.Last();
         var maxCards = dealResult.Cards;
         var maxDecks = dealResult.Cards / 52;
         var secs = Math.Max(sw.ElapsedMilliseconds / 1000, 1);
