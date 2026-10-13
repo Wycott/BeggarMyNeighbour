@@ -40,6 +40,8 @@ public sealed class MqttSimulatorResultsProvider : ISimulatorResultsProvider
         var factory = new MqttClientFactory();
         using var client = factory.CreateMqttClient();
 
+        var window = new ResponseWindow(_discovery.ResponseWindow, _discovery.IdleGap);
+
         client.ApplicationMessageReceivedAsync += e =>
         {
             if (e.ApplicationMessage.Topic == DiscoveryTopics.ResultsResponse)
@@ -49,6 +51,7 @@ public sealed class MqttSimulatorResultsProvider : ISimulatorResultsProvider
                 if (response is not null && response.RequestId == requestId)
                 {
                     responses[response.SimulatorId] = response;
+                    window.RecordActivity();
                 }
             }
 
@@ -86,8 +89,8 @@ public sealed class MqttSimulatorResultsProvider : ISimulatorResultsProvider
 
             await client.PublishAsync(requestMessage, cancellationToken);
 
-            // Wait the configured window for simulators to answer.
-            await Task.Delay(_discovery.ResponseWindow, cancellationToken);
+            // Collect replies, returning early once responses go quiet (capped by the window).
+            await window.WaitAsync(cancellationToken);
 
             if (client.IsConnected)
             {

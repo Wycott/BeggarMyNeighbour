@@ -12,7 +12,7 @@
             {"Fig", "28 August 2026 - ReSharper mods and workflow fix"},
             {"Gooseberry", "4 October 2026 - Ditch known bad deals early"},
             {"Hazelnut", "5 October 2026 - Show better units for run time"},
-            {"Kiwi-gamma", "12 October 2026 - Store output in model, have per instance GUID, web application, messaging"}
+            {"Kiwi-delta", "12 October 2026 - Store output in model, have per instance GUID, web application, messaging"}
         };
     }
 }

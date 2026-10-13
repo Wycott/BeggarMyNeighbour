@@ -13,6 +13,12 @@ public class DashboardViewModel
     public DateTime AsOfUtc { get; init; }
 
     /// <summary>
+    /// How long the server took to fetch the data from the simulators (discovery poll + results
+    /// pull) for this load/refresh.
+    /// </summary>
+    public TimeSpan FetchDuration { get; init; }
+
+    /// <summary>
     /// Number of simulators that answered the discovery poll over the message bus on this load.
     /// This reflects live connectivity, independent of the results shown in the tabs.
     /// </summary>

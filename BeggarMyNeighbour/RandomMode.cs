@@ -8,6 +8,12 @@ internal partial class Program
 {
     private static long bestRate;
 
+    // Computed on use rather than at field-initialization time. ReleaseNotes is a static field
+    // declared in another partial-class file, and the order static field initializers run across
+    // files is not guaranteed - evaluating this eagerly here risks reading ReleaseNotes before it
+    // is populated (a null-reference crash in the static constructor).
+    private static string ReleaseCodeName => ReleaseNotes.Keys.Last();
+
     private static void RandomMode(Simulator simulator)
     {
         var sw = new Stopwatch();
@@ -53,8 +59,7 @@ internal partial class Program
     private static void OutputBestResultSoFar(DealResult dealResult, long iterations, string fileNameStub, ref int record, Stopwatch sw, Simulator simulator)
     {
         record++;
-
-        var releaseCodeName = ReleaseNotes.Keys.Last();
+        
         var maxCards = dealResult.Cards;
         var maxDecks = dealResult.Cards / 52;
         var secs = Math.Max(sw.ElapsedMilliseconds / 1000, 1);
@@ -82,7 +87,7 @@ internal partial class Program
             PlayerTwoSuits = dealResult.PlayerTwoSuits,
             PlayerOneOutcome = dealResult.PlayerOneOutcome,
             PlayerTwoOutcome = dealResult.PlayerTwoOutcome,
-            ReleaseCodeName = releaseCodeName,
+            ReleaseCodeName = ReleaseCodeName,
         });
 
         var resultLine0 = RuntimeFormatter.Format(sw.ElapsedMilliseconds);
@@ -92,7 +97,7 @@ internal partial class Program
         var resultLine3 = $"Cards played {maxCards:N0}";
         var resultLine4 = $"Decks played {maxDecks:N0}";
         var resultLine5 = $"Tricks played {dealResult.Tricks:N0}";
-        var resultLine6 = releaseCodeName;
+        var resultLine6 = ReleaseCodeName;
         var resultLine8 = string.Empty;
 
         Output.WriteResults(fileNameStub,

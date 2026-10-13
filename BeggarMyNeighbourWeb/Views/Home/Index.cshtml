@@ -2,6 +2,12 @@
 @{
     ViewData["Title"] = "Simulators";
 }
+@functions {
+    private static string FormatFetchDuration(TimeSpan duration)
+    {
+        return $"{duration.TotalMilliseconds:N0}ms";
+    }
+}
 
 <style>
     /* When the dashboard is in "latest only" mode, hide every result row except the newest. */
@@ -16,6 +22,7 @@
         <div class="text-muted small">
             Showing data as of @Model.AsOfUtc.ToString("u")
             · @Model.Simulators.Count simulator@(Model.Simulators.Count == 1 ? "" : "s") with results
+            (in @FormatFetchDuration(Model.FetchDuration))
         </div>
         <div class="mt-1">
             <span class="badge rounded-pill @(Model.ConnectedSimulatorCount > 0 ? "text-bg-success" : "text-bg-secondary")">

@@ -27,14 +27,18 @@ public class HomeController : Controller
     public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
     {
         var asOfUtc = DateTime.UtcNow;
+        var stopwatch = Stopwatch.StartNew();
 
         // Discover who's live on the bus (poll + wait window), and fetch results for the tabs.
         var discovered = await _discoveryProvider.DiscoverAsync(cancellationToken);
         var simulators = await _resultsProvider.GetSimulatorsAsync(cancellationToken);
 
+        stopwatch.Stop();
+
         var model = new DashboardViewModel
         {
             AsOfUtc = asOfUtc,
+            FetchDuration = stopwatch.Elapsed,
             ConnectedSimulatorCount = discovered.Count,
             Simulators = simulators
                 .OrderBy(s => s.StartedUtc)
