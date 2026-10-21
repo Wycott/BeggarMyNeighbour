@@ -43,12 +43,14 @@ internal partial class Program
         var settings = new MqttSettings();
 
         var host = Environment.GetEnvironmentVariable("Mqtt__Host");
+
         if (!string.IsNullOrWhiteSpace(host))
         {
             settings.Host = host;
         }
 
         var portText = Environment.GetEnvironmentVariable("Mqtt__Port");
+
         if (int.TryParse(portText, out var port))
         {
             settings.Port = port;

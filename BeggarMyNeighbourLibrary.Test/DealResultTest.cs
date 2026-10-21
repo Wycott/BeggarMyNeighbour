@@ -45,6 +45,7 @@ public class DealResultTest
     public void PlayerOneSuits_AllNonSuits_Returns0()
     {
         var dealResult = new DealResult { PlayerOneDeal = "--------------------------" };
+
         Assert.Equal(0, dealResult.PlayerOneSuits);
     }
 
@@ -52,6 +53,7 @@ public class DealResultTest
     public void PlayerTwoSuits_AllNonSuits_Returns0()
     {
         var dealResult = new DealResult { PlayerTwoDeal = "--------------------------" };
+
         Assert.Equal(0, dealResult.PlayerTwoSuits);
     }
 
